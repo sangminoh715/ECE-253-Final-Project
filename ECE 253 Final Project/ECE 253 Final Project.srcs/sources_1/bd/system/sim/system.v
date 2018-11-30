@@ -1,7 +1,7 @@
 //Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-//Date        : Fri Nov 30 01:31:37 2018
+//Date        : Fri Nov 30 01:48:29 2018
 //Host        : MY-LAPTOP running 64-bit major release  (build 9200)
 //Command     : generate_target system.bd
 //Design      : system
@@ -1495,20 +1495,20 @@ module system
     btnCpuReset,
     clock_rtl,
     led);
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME DDR2, AXI_ARBITRATION_SCHEME TDM, BURST_LENGTH 8, CAN_DEBUG false, CAS_LATENCY 11, CAS_WRITE_LATENCY 11, CS_ENABLED true, DATA_MASK_ENABLED true, DATA_WIDTH 8, MEMORY_TYPE COMPONENTS, MEM_ADDR_MAP ROW_COLUMN_BANK, SLOT Single, TIMEPERIOD_PS 1250" *) output [12:0]DDR2_addr;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output [2:0]DDR2_ba;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output DDR2_cas_n;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output [0:0]DDR2_ck_n;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output [0:0]DDR2_ck_p;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output [0:0]DDR2_cke;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output [0:0]DDR2_cs_n;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output [1:0]DDR2_dm;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) inout [15:0]DDR2_dq;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) inout [1:0]DDR2_dqs_n;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) inout [1:0]DDR2_dqs_p;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output [0:0]DDR2_odt;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output DDR2_ras_n;
-  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 " *) output DDR2_we_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 ADDR" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME DDR2, AXI_ARBITRATION_SCHEME TDM, BURST_LENGTH 8, CAN_DEBUG false, CAS_LATENCY 11, CAS_WRITE_LATENCY 11, CS_ENABLED true, DATA_MASK_ENABLED true, DATA_WIDTH 8, MEMORY_TYPE COMPONENTS, MEM_ADDR_MAP ROW_COLUMN_BANK, SLOT Single, TIMEPERIOD_PS 1250" *) output [12:0]DDR2_addr;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 BA" *) output [2:0]DDR2_ba;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 CAS_N" *) output DDR2_cas_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 CK_N" *) output [0:0]DDR2_ck_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 CK_P" *) output [0:0]DDR2_ck_p;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 CKE" *) output [0:0]DDR2_cke;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 CS_N" *) output [0:0]DDR2_cs_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 DM" *) output [1:0]DDR2_dm;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 DQ" *) inout [15:0]DDR2_dq;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 DQS_N" *) inout [1:0]DDR2_dqs_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 DQS_P" *) inout [1:0]DDR2_dqs_p;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 ODT" *) output [0:0]DDR2_odt;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 RAS_N" *) output DDR2_ras_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR2 WE_N" *) output DDR2_we_n;
   input [3:0]btn;
   (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 RST.BTNCPURESET RST" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME RST.BTNCPURESET, POLARITY ACTIVE_LOW" *) input btnCpuReset;
   (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 CLK.CLOCK_RTL CLK" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME CLK.CLOCK_RTL, CLK_DOMAIN system_sys_clk_i_0, FREQ_HZ 100000000, PHASE 0.000" *) input clock_rtl;

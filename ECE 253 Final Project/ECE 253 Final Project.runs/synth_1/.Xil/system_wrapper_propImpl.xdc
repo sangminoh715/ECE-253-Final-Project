@@ -1,4 +1,4 @@
-set_property SRC_FILE_INFO {cfile:{D:/sangm/Documents/UCSB/4th Year/Fall/ECE 253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.srcs/constrs_1/imports/Lab Files/Nexys4_Handout_2018.xdc} rfile:{../../../ECE 253 Final Project.srcs/constrs_1/imports/Lab Files/Nexys4_Handout_2018.xdc} id:1} [current_design]
+set_property SRC_FILE_INFO {cfile:{D:/Xilinx/Projects/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.srcs/constrs_1/imports/Lab Files/Nexys4_Handout_2018.xdc} rfile:{../../../ECE 253 Final Project.srcs/constrs_1/imports/Lab Files/Nexys4_Handout_2018.xdc} id:1} [current_design]
 set_property src_info {type:XDC file:1 line:7 export:INPUT save:INPUT read:READ} [current_design]
 set_property -dict { PACKAGE_PIN E3    IOSTANDARD LVCMOS33 } [get_ports { clock_rtl }]; #IO_L12P_T1_MRCC_35 Sch=clk100mhz
 set_property src_info {type:XDC file:1 line:32 export:INPUT save:INPUT read:READ} [current_design]

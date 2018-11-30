@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='D:/sangm/Documents/UCSB/4th Year/Fall/ECE 253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.runs/impl_1'
+HD_PWD='D:/Xilinx/Projects/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
