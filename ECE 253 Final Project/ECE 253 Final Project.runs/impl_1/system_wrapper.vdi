@@ -1,0 +1,19 @@
+#-----------------------------------------------------------
+# Vivado v2017.4 (64-bit)
+# SW Build 2086221 on Fri Dec 15 20:55:39 MST 2017
+# IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
+# Start of session at: Fri Nov 30 01:41:15 2018
+# Process ID: 8372
+# Current directory: D:/sangm/Documents/UCSB/4th Year/Fall/ECE 253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.runs/impl_1
+# Command line: vivado.exe -log system_wrapper.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source system_wrapper.tcl -notrace
+# Log file: D:/sangm/Documents/UCSB/4th Year/Fall/ECE 253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.runs/impl_1/system_wrapper.vdi
+# Journal file: D:/sangm/Documents/UCSB/4th Year/Fall/ECE 253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source system_wrapper.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Xilinx/Vivado/2017.4/data/ip'.
+ERROR: [Common 17-680] Path length exceeds 248-Byte maximum allowed by Windows: d:/sangm/Documents/UCSB/4th Year/Fall/ECE 253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.runs/impl_1/{D:/sangm/Documents/UCSB/4th Year/Fall/ECE 253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final Project.cache/ip}/2017.4
+Please consider using the OS subst command to shorten the path length by mapping part of the path to a virtual drive letter. See Answer Record AR52787 for more information.
+Resolution: In Windows 7 or later, the mklink command can also be used to create a symbolic link and shorten the path.
+INFO: [Common 17-206] Exiting Vivado at Fri Nov 30 01:41:30 2018...
