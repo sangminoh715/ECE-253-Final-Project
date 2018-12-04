@@ -1,4 +1,4 @@
-15:30:23 **** Auto Build of configuration Debug for project qwop ****
+16:45:26 **** Auto Build of configuration Debug for project qwop ****
 make all 
 'Building file: ../src/test_TFT.c'
 'Invoking: MicroBlaze gcc compiler'
@@ -13,9 +13,9 @@ mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../qwop_bsp/microblaze_0/lib -mlittle-e
 'Invoking: MicroBlaze Print Size'
 mb-size qwop.elf  |tee "qwop.elf.size"
    text	   data	    bss	    dec	    hex	filename
-   5018	    404	   3162	   8584	   2188	qwop.elf
+   5066	    404	   2138	   7608	   1db8	qwop.elf
 'Finished building: qwop.elf.size'
 ' '
 
-15:30:25 Build Finished (took 1s.925ms)
+16:45:27 Build Finished (took 743ms)
 

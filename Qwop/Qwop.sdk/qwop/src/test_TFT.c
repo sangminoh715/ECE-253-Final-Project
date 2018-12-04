@@ -32,6 +32,10 @@
 #include "xil_cache.h"
 #include "xtft.h"
 
+//#define RED		0x00FC0000
+//#define GREEN	0x0000FC00
+//#define BLUE	0x000000FC
+
 #define FRAME_BUFFER_0_ADDR XPAR_MIG_7SERIES_0_BASEADDR
 
 
@@ -91,9 +95,31 @@ int main ()
 
    }
 
-
+   print("---Initializing Screen---\r\n");
    InitScreen();
 
+//   while(1) {
+//	   int num=0;
+//	   u32 color=RED;
+//	   switch(num%3) {
+//	   case 0:
+//		   color = RED;
+//		   break;
+//	   case 1:
+//		   color = GREEN;
+//		   break;
+//	   case 2:
+//		   color = BLUE;
+//		   break;
+//	   }
+//	   int row=0, col=0;
+//	   for(row=0; row<480; row++) {
+//		   for(col=0; col<640; col++) {
+//			   Xil_Out32(FRAME_BUFFER_0_ADDR+4096*row+4*col,color); //0x000000FC for blue, 0x0000FC00 for green, 0x00FC0000 for red
+//		   }
+//	   }
+//	   ++num;
+//   }
 
    print("---Exiting main---\n\r");
    Xil_DCacheDisable();
@@ -108,7 +134,7 @@ void InitScreen(void)
     {
    	 for(col=0; col<640; col++)
    	 {
-   		 	 	Xil_Out32(FRAME_BUFFER_0_ADDR+4096*row+4*col,0x00FC0000); //0x000000FC for blue, 0x0000FC00 for green, 0x00FC0000 for red
+   		 	 	Xil_Out32(FRAME_BUFFER_0_ADDR+4096*row+4*col,0x00FC0000);
    	 }
     }
     *(TFT) = FRAME_BUFFER_0_ADDR;			// Point TFT to address of frame buffer
