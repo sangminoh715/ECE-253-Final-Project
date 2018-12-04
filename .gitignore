@@ -52,5 +52,6 @@ Mkfile.old
 dkms.conf
 
 # Other
-Qwop/*.jou
+*.jou
+*.log
 Qwop/vivado*
