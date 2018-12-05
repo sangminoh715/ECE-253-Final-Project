@@ -230,3 +230,85 @@ java.lang.RuntimeException:
 16:35:52 WARN  : Given XMD transaction timeout value is invalid. Using default value of 60000 milli seconds
 16:35:52 WARN  : Given XMD transaction timeout value is invalid. Using default value of 60000 milli seconds
 16:45:34 ERROR : Unexpected error while parsing XMD response ?: com.google.gson.JsonSyntaxException: com.google.gson.stream.MalformedJsonException: invalid number or unquoted string near 
+13:47:48 INFO  : Registering command handlers for SDK TCF services
+13:47:50 INFO  : Launching XSCT server: xsct.bat -interactive D:\Xilinx\Projects\ECE-253-Final-Project\Qwop\Qwop.sdk\temp_xsdb_launch_script.tcl
+13:48:00 INFO  : XSCT server has started successfully.
+13:48:00 INFO  : Successfully done setting XSCT server connection channel  
+13:48:07 INFO  : Successfully done setting SDK workspace  
+13:48:07 INFO  : Processing command line option -hwspec D:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.sdk/system_wrapper.hdf.
+13:48:07 INFO  : Checking for hwspec changes in the project system_wrapper_hw_platform_0.
+13:48:15 INFO  : SDK has detected change in the last modified timestamps for source hardware specification file Source:1543960570000,  Project:1543879581737
+13:48:15 INFO  : The hardware specification for project 'system_wrapper_hw_platform_0' is different from D:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.sdk/system_wrapper.hdf.
+13:48:17 INFO  : Copied contents of D:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.sdk/system_wrapper.hdf into \system_wrapper_hw_platform_0\system.hdf.
+13:48:48 INFO  : Synchronizing projects in the workspace with the hardware platform specification changes.
+13:49:02 INFO  : 
+13:49:03 INFO  : Updating hardware inferred compiler options for qwop.
+13:49:03 INFO  : Clearing existing target manager status.
+13:49:04 WARN  : Given IPC port value is invalid. Using default port 2350
+13:49:04 WARN  : Given XMD timeout value is invalid. Using default value of 50000
+13:49:07 WARN  : Given XMD transaction timeout value is invalid. Using default value of 60000 milli seconds
+13:53:49 INFO  : Inferring section assignments and sizes from elf file: D:\Xilinx\Projects\ECE-253-Final-Project\Qwop\Qwop.sdk\Qwop\Debug\Qwop.elf
+13:53:54 INFO  : Successfully generated D:\Xilinx\Projects\ECE-253-Final-Project\Qwop\Qwop.sdk\Qwop\src\lscript.ld.
+13:53:54 INFO  : Applying linker script to all configurations of project Qwop.
+13:53:54 INFO  : Setting rebuild state to true for all configurations of project Qwop.
+13:54:28 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+13:54:31 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA" && level==0} -index 0' command is executed.
+13:54:34 INFO  : FPGA configured successfully with bitstream "D:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.sdk/system_wrapper_hw_platform_0/download.bit"
+13:55:15 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA" && level==0} -index 0' command is executed.
+13:55:15 INFO  : 'fpga -state' command is executed.
+13:55:15 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+13:55:16 INFO  : Jtag cable 'Digilent Nexys4DDR 210292A4C40EA' is selected.
+13:55:16 INFO  : 'jtag frequency' command is executed.
+13:55:16 INFO  : Context for processor 'microblaze_0' is selected.
+13:55:16 INFO  : Processor reset is completed for 'microblaze_0'.
+13:55:16 INFO  : Context for processor 'microblaze_0' is selected.
+13:55:17 INFO  : The application 'D:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.sdk/Qwop/Debug/Qwop.elf' is downloaded to processor 'microblaze_0'.
+13:55:17 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~ "microblaze*#0" && bscan=="USER2"  && jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "microblaze*#0" && bscan=="USER2"  && jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA"} -index 0
+dow D:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.sdk/Qwop/Debug/Qwop.elf
+----------------End of Script----------------
+
+13:55:17 INFO  : Memory regions updated for context MicroBlaze #0
+13:55:17 INFO  : Memory regions updated for context MicroBlaze Debug Module at USER2
+13:55:17 INFO  : Context for processor 'microblaze_0' is selected.
+13:55:17 INFO  : 'con' command is executed.
+13:55:17 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "microblaze*#0" && bscan=="USER2"  && jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA"} -index 0
+con
+----------------End of Script----------------
+
+13:55:17 INFO  : Launch script is exported to file 'D:\Xilinx\Projects\ECE-253-Final-Project\Qwop\Qwop.sdk\.sdk\launch_scripts\xilinx_c-c++_application_(system_debugger)\system_debugger_using_debug_qwop.elf_on_local.tcl'
+13:57:34 INFO  : Disconnected from the channel tcfchan#1.
+13:57:36 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA" && level==0} -index 0' command is executed.
+13:57:36 INFO  : 'fpga -state' command is executed.
+13:57:36 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+13:57:37 INFO  : Jtag cable 'Digilent Nexys4DDR 210292A4C40EA' is selected.
+13:57:37 INFO  : 'jtag frequency' command is executed.
+13:57:37 INFO  : Context for processor 'microblaze_0' is selected.
+13:57:37 INFO  : Processor reset is completed for 'microblaze_0'.
+13:57:37 INFO  : Context for processor 'microblaze_0' is selected.
+13:57:38 INFO  : The application 'D:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.sdk/Qwop/Debug/Qwop.elf' is downloaded to processor 'microblaze_0'.
+13:57:38 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~ "microblaze*#0" && bscan=="USER2"  && jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "microblaze*#0" && bscan=="USER2"  && jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA"} -index 0
+dow D:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.sdk/Qwop/Debug/Qwop.elf
+----------------End of Script----------------
+
+13:57:38 INFO  : Memory regions updated for context MicroBlaze #0
+13:57:38 INFO  : Memory regions updated for context MicroBlaze Debug Module at USER2
+13:57:38 INFO  : Context for processor 'microblaze_0' is selected.
+13:57:38 INFO  : 'con' command is executed.
+13:57:38 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "microblaze*#0" && bscan=="USER2"  && jtag_cable_name =~ "Digilent Nexys4DDR 210292A4C40EA"} -index 0
+con
+----------------End of Script----------------
+
+13:57:38 INFO  : Launch script is exported to file 'D:\Xilinx\Projects\ECE-253-Final-Project\Qwop\Qwop.sdk\.sdk\launch_scripts\xilinx_c-c++_application_(system_debugger)\system_debugger_using_debug_qwop.elf_on_local.tcl'
+14:01:14 INFO  : Inferring section assignments and sizes from elf file: D:\Xilinx\Projects\ECE-253-Final-Project\Qwop\Qwop.sdk\Qwop\Debug\Qwop.elf
+14:07:53 INFO  : Disconnected from the channel tcfchan#2.
+14:07:57 ERROR : Unexpected error while parsing XMD response ?: com.google.gson.JsonSyntaxException: com.google.gson.stream.MalformedJsonException: invalid number or unquoted string near 

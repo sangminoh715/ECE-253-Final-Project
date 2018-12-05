@@ -1,21 +1,25 @@
-16:45:26 **** Auto Build of configuration Debug for project qwop ****
+14:07:35 **** Auto Build of configuration Debug for project Qwop ****
 make all 
-'Building file: ../src/test_TFT.c'
+'Building file: ../src/qwop.c'
 'Invoking: MicroBlaze gcc compiler'
-mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/test_TFT.o" -I../../qwop_bsp/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/test_TFT.d" -MT"src/test_TFT.o" -o "src/test_TFT.o" "../src/test_TFT.c"
-'Finished building: ../src/test_TFT.c'
+mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/qwop.o" -I../../Qwop_bsp/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/qwop.d" -MT"src/qwop.o" -o "src/qwop.o" "../src/qwop.c"
+../src/qwop.c: In function 'DrawLine':
+../src/qwop.c:196:10: warning: implicit declaration of function 'abs' [-Wimplicit-function-declaration]
+  dxabs = abs(dx);
+          ^~~
+'Finished building: ../src/qwop.c'
 ' '
-'Building target: qwop.elf'
+'Building target: Qwop.elf'
 'Invoking: MicroBlaze gcc linker'
-mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../qwop_bsp/microblaze_0/lib -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "qwop.elf"  ./src/platform.o ./src/test_TFT.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
-'Finished building target: qwop.elf'
+mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../Qwop_bsp/microblaze_0/lib -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "Qwop.elf"  ./src/qwop.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Qwop.elf'
 ' '
 'Invoking: MicroBlaze Print Size'
-mb-size qwop.elf  |tee "qwop.elf.size"
+mb-size Qwop.elf  |tee "Qwop.elf.size"
    text	   data	    bss	    dec	    hex	filename
-   5066	    404	   2138	   7608	   1db8	qwop.elf
-'Finished building: qwop.elf.size'
+  28452	    500	   2152	  31104	   7980	Qwop.elf
+'Finished building: Qwop.elf.size'
 ' '
 
-16:45:27 Build Finished (took 743ms)
+14:07:37 Build Finished (took 1s.252ms)
 
