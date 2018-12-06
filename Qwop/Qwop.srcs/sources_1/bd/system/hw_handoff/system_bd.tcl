@@ -252,7 +252,7 @@ proc write_mig_file_system_mig_7series_0_0 { str_mig_prj_filepath } {
    puts $mig_prj_file {            <C0_C_RD_WR_ARB_ALGORITHM>RD_PRI_REG</C0_C_RD_WR_ARB_ALGORITHM>}
    puts $mig_prj_file {            <C0_S_AXI_ADDR_WIDTH>27</C0_S_AXI_ADDR_WIDTH>}
    puts $mig_prj_file {            <C0_S_AXI_DATA_WIDTH>32</C0_S_AXI_DATA_WIDTH>}
-   puts $mig_prj_file {            <C0_S_AXI_ID_WIDTH>1</C0_S_AXI_ID_WIDTH>}
+   puts $mig_prj_file {            <C0_S_AXI_ID_WIDTH>2</C0_S_AXI_ID_WIDTH>}
    puts $mig_prj_file {            <C0_S_AXI_SUPPORTS_NARROW_BURST>1</C0_S_AXI_SUPPORTS_NARROW_BURST>}
    puts $mig_prj_file {        </AXIParameters>}
    puts $mig_prj_file {    </Controller>}
@@ -389,12 +389,12 @@ proc create_root_design { parentCell } {
   set DDR2 [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR2 ]
 
   # Create ports
-  set VGA_B [ create_bd_port -dir O -from 3 -to 0 VGA_B ]
-  set VGA_G [ create_bd_port -dir O -from 3 -to 0 VGA_G ]
+  set VGA_B [ create_bd_port -dir O -from 5 -to 0 VGA_B ]
+  set VGA_G [ create_bd_port -dir O -from 5 -to 0 VGA_G ]
   set VGA_HS [ create_bd_port -dir O VGA_HS ]
-  set VGA_R [ create_bd_port -dir O -from 3 -to 0 VGA_R ]
+  set VGA_R [ create_bd_port -dir O -from 5 -to 0 VGA_R ]
   set VGA_VS [ create_bd_port -dir O VGA_VS ]
-  set btn [ create_bd_port -dir I -from 3 -to 0 btn ]
+  set btn [ create_bd_port -dir I -from 4 -to 0 btn ]
   set btnCpuReset [ create_bd_port -dir I -type rst btnCpuReset ]
   set clock_rtl [ create_bd_port -dir I -type clk clock_rtl ]
   set led [ create_bd_port -dir O -from 15 -to 0 led ]
@@ -418,20 +418,12 @@ proc create_root_design { parentCell } {
   # Create instance: axi_timer_0, and set properties
   set axi_timer_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_timer:2.0 axi_timer_0 ]
 
-  # Create instance: blue, and set properties
-  set blue [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 blue ]
-  set_property -dict [ list \
-   CONFIG.DIN_FROM {5} \
-   CONFIG.DIN_TO {2} \
-   CONFIG.DIN_WIDTH {6} \
-   CONFIG.DOUT_WIDTH {4} \
- ] $blue
-
   # Create instance: btns, and set properties
   set btns [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 btns ]
   set_property -dict [ list \
    CONFIG.C_ALL_INPUTS {1} \
-   CONFIG.C_GPIO_WIDTH {4} \
+   CONFIG.C_GPIO_WIDTH {5} \
+   CONFIG.C_INTERRUPT_PRESENT {1} \
  ] $btns
 
   # Create instance: clk_wiz_0, and set properties
@@ -446,15 +438,6 @@ proc create_root_design { parentCell } {
    CONFIG.USE_LOCKED {false} \
    CONFIG.USE_RESET {false} \
  ] $clk_wiz_0
-
-  # Create instance: green, and set properties
-  set green [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 green ]
-  set_property -dict [ list \
-   CONFIG.DIN_FROM {5} \
-   CONFIG.DIN_TO {2} \
-   CONFIG.DIN_WIDTH {6} \
-   CONFIG.DOUT_WIDTH {4} \
- ] $green
 
   # Create instance: mdm_1, and set properties
   set mdm_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.2 mdm_1 ]
@@ -504,6 +487,9 @@ proc create_root_design { parentCell } {
 
   # Create instance: microblaze_0_xlconcat, and set properties
   set microblaze_0_xlconcat [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 microblaze_0_xlconcat ]
+  set_property -dict [ list \
+   CONFIG.NUM_PORTS {3} \
+ ] $microblaze_0_xlconcat
 
   # Create instance: mig_7series_0, and set properties
   set mig_7series_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mig_7series:4.0 mig_7series_0 ]
@@ -520,15 +506,6 @@ proc create_root_design { parentCell } {
    CONFIG.RESET_BOARD_INTERFACE {Custom} \
    CONFIG.XML_INPUT_FILE {mig_a.prj} \
  ] $mig_7series_0
-
-  # Create instance: red, and set properties
-  set red [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 red ]
-  set_property -dict [ list \
-   CONFIG.DIN_FROM {5} \
-   CONFIG.DIN_TO {2} \
-   CONFIG.DIN_WIDTH {6} \
-   CONFIG.DOUT_WIDTH {4} \
- ] $red
 
   # Create instance: rst_mig_7series_0_100M, and set properties
   set rst_mig_7series_0_100M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_mig_7series_0_100M ]
@@ -553,22 +530,20 @@ proc create_root_design { parentCell } {
   # Create port connections
   connect_bd_net -net LEDs_gpio_io_o [get_bd_ports led] [get_bd_pins LEDs/gpio_io_o]
   connect_bd_net -net axi_tft_0_tft_hsync [get_bd_ports VGA_HS] [get_bd_pins axi_tft_0/tft_hsync]
-  connect_bd_net -net axi_tft_0_tft_vga_b [get_bd_pins axi_tft_0/tft_vga_b] [get_bd_pins blue/Din]
-  connect_bd_net -net axi_tft_0_tft_vga_g [get_bd_pins axi_tft_0/tft_vga_g] [get_bd_pins green/Din]
-  connect_bd_net -net axi_tft_0_tft_vga_r [get_bd_pins axi_tft_0/tft_vga_r] [get_bd_pins red/Din]
+  connect_bd_net -net axi_tft_0_tft_vga_b [get_bd_ports VGA_B] [get_bd_pins axi_tft_0/tft_vga_b]
+  connect_bd_net -net axi_tft_0_tft_vga_g [get_bd_ports VGA_G] [get_bd_pins axi_tft_0/tft_vga_g]
+  connect_bd_net -net axi_tft_0_tft_vga_r [get_bd_ports VGA_R] [get_bd_pins axi_tft_0/tft_vga_r]
   connect_bd_net -net axi_tft_0_tft_vsync [get_bd_ports VGA_VS] [get_bd_pins axi_tft_0/tft_vsync]
   connect_bd_net -net axi_timer_0_interrupt [get_bd_pins axi_timer_0/interrupt] [get_bd_pins microblaze_0_xlconcat/In1]
-  connect_bd_net -net blue_Dout [get_bd_ports VGA_B] [get_bd_pins blue/Dout]
+  connect_bd_net -net btns_ip2intc_irpt [get_bd_pins btns/ip2intc_irpt] [get_bd_pins microblaze_0_xlconcat/In2]
   connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins axi_tft_0/sys_tft_clk] [get_bd_pins clk_wiz_0/clk_out1]
   connect_bd_net -net gpio_io_i_0_1 [get_bd_ports btn] [get_bd_pins btns/gpio_io_i]
-  connect_bd_net -net green_Dout [get_bd_ports VGA_G] [get_bd_pins green/Dout]
   connect_bd_net -net mdm_1_Interrupt [get_bd_pins mdm_1/Interrupt] [get_bd_pins microblaze_0_xlconcat/In0]
   connect_bd_net -net mdm_1_debug_sys_rst [get_bd_pins mdm_1/Debug_SYS_Rst] [get_bd_pins rst_mig_7series_0_100M/mb_debug_sys_rst]
   connect_bd_net -net microblaze_0_Clk [get_bd_pins LEDs/s_axi_aclk] [get_bd_pins axi_tft_0/m_axi_aclk] [get_bd_pins axi_tft_0/s_axi_aclk] [get_bd_pins axi_timer_0/s_axi_aclk] [get_bd_pins btns/s_axi_aclk] [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins mdm_1/S_AXI_ACLK] [get_bd_pins microblaze_0/Clk] [get_bd_pins microblaze_0_axi_intc/processor_clk] [get_bd_pins microblaze_0_axi_intc/s_axi_aclk] [get_bd_pins microblaze_0_axi_periph/ACLK] [get_bd_pins microblaze_0_axi_periph/M00_ACLK] [get_bd_pins microblaze_0_axi_periph/M01_ACLK] [get_bd_pins microblaze_0_axi_periph/M02_ACLK] [get_bd_pins microblaze_0_axi_periph/M03_ACLK] [get_bd_pins microblaze_0_axi_periph/M04_ACLK] [get_bd_pins microblaze_0_axi_periph/M05_ACLK] [get_bd_pins microblaze_0_axi_periph/M06_ACLK] [get_bd_pins microblaze_0_axi_periph/S00_ACLK] [get_bd_pins microblaze_0_axi_periph/S01_ACLK] [get_bd_pins microblaze_0_axi_periph/S02_ACLK] [get_bd_pins microblaze_0_local_memory/LMB_Clk] [get_bd_pins mig_7series_0/ui_clk] [get_bd_pins rst_mig_7series_0_100M/slowest_sync_clk]
   connect_bd_net -net microblaze_0_intr [get_bd_pins microblaze_0_axi_intc/intr] [get_bd_pins microblaze_0_xlconcat/dout]
   connect_bd_net -net mig_7series_0_mmcm_locked [get_bd_pins mig_7series_0/mmcm_locked] [get_bd_pins rst_mig_7series_0_100M/dcm_locked]
   connect_bd_net -net mig_7series_0_ui_addn_clk_0 [get_bd_pins mig_7series_0/clk_ref_i] [get_bd_pins mig_7series_0/ui_addn_clk_0]
-  connect_bd_net -net red_Dout [get_bd_ports VGA_R] [get_bd_pins red/Dout]
   connect_bd_net -net rst_mig_7series_0_100M_bus_struct_reset [get_bd_pins microblaze_0_local_memory/SYS_Rst] [get_bd_pins rst_mig_7series_0_100M/bus_struct_reset]
   connect_bd_net -net rst_mig_7series_0_100M_interconnect_aresetn [get_bd_pins microblaze_0_axi_periph/ARESETN] [get_bd_pins rst_mig_7series_0_100M/interconnect_aresetn]
   connect_bd_net -net rst_mig_7series_0_100M_mb_reset [get_bd_pins microblaze_0/Reset] [get_bd_pins microblaze_0_axi_intc/processor_rst] [get_bd_pins rst_mig_7series_0_100M/mb_reset]

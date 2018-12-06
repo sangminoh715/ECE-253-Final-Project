@@ -16,7 +16,6 @@ proc create_report { reportName command } {
     send_msg_id runtcl-5 warning "$msg"
   }
 }
-set_msg_config -id {Common 17-41} -limit 10000000
 create_project -in_memory -part xc7a100tcsg324-1
 
 set_param project.singleFileAddWarning.threshold 0
@@ -48,6 +47,18 @@ set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_rst_mig_7series_0_100M_0/system_rst_mig_7series_0_100M_0_ooc.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_timer_0_0/system_axi_timer_0_0.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_timer_0_0/system_axi_timer_0_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_board.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_2/system_axi_gpio_0_2_board.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_2/system_axi_gpio_0_2_ooc.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_2/system_axi_gpio_0_2.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_board.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_tft_0_0/system_axi_tft_0_0.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_tft_0_0/system_axi_tft_0_0_clocks.xdc]
+set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_tft_0_0/system_axi_tft_0_0_ooc.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_xbar_0/system_xbar_0_ooc.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_dlmb_v10_0/system_dlmb_v10_0.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_dlmb_v10_0/system_dlmb_v10_0_ooc.xdc]
@@ -56,18 +67,6 @@ set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_dlmb_bram_if_cntlr_0/system_dlmb_bram_if_cntlr_0_ooc.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_ilmb_bram_if_cntlr_0/system_ilmb_bram_if_cntlr_0_ooc.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_lmb_bram_0/system_lmb_bram_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_board.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_1/system_axi_gpio_0_1_board.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_1/system_axi_gpio_0_1_ooc.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_1/system_axi_gpio_0_1.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_tft_0_0/system_axi_tft_0_0.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_tft_0_0/system_axi_tft_0_0_clocks.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_tft_0_0/system_axi_tft_0_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_board.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0.xdc]
-set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_ooc.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_auto_pc_5/system_auto_pc_5_ooc.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_auto_pc_4/system_auto_pc_4_ooc.xdc]
 set_property used_in_implementation false [get_files -all d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_auto_pc_3/system_auto_pc_3_ooc.xdc]

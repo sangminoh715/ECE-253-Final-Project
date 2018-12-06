@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Qwop</name>
-	<comment>Created by SDK v2017.4. Qwop_bsp - microblaze_0</comment>
+	<name>qwop</name>
+	<comment>Created by SDK v2017.4. qwop_bsp - microblaze_0</comment>
 	<projects>
-		<project>Qwop_bsp</project>
+		<project>qwop_bsp</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

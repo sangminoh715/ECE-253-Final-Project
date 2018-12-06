@@ -118,8 +118,8 @@ int main() {
 
 	// Initialize GPIO Peripherals
 
-	XGpio_Initialize(&led, XPAR_GPIO_1_DEVICE_ID);
-	XGpio_Initialize(&btn, XPAR_GPIO_3_DEVICE_ID);
+	XGpio_Initialize(&led, XPAR_GPIO_0_DEVICE_ID);
+	XGpio_Initialize(&btn, XPAR_GPIO_1_DEVICE_ID);
 	XGpio_SetDataDirection(&btn, GPIO_CHANNEL, 0xF);
 
 	// Initialize Interrupt Controller

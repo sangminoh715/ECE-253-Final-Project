@@ -1,11 +1,11 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-// Date        : Fri Nov 30 01:31:35 2018
+// Date        : Wed Dec  5 20:09:09 2018
 // Host        : MY-LAPTOP running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim -rename_top system_ilmb_bram_if_cntlr_0 -prefix
-//               system_ilmb_bram_if_cntlr_0_ system_ilmb_bram_if_cntlr_0_sim_netlist.v
-// Design      : system_ilmb_bram_if_cntlr_0
+//               system_ilmb_bram_if_cntlr_0_ system_dlmb_bram_if_cntlr_0_sim_netlist.v
+// Design      : system_dlmb_bram_if_cntlr_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
 // Device      : xc7a100tcsg324-1
@@ -16,7 +16,7 @@
 (* C_CE_FAILING_REGISTERS = "0" *) (* C_ECC = "0" *) (* C_ECC_ONOFF_REGISTER = "0" *) 
 (* C_ECC_ONOFF_RESET_VALUE = "1" *) (* C_ECC_STATUS_REGISTERS = "0" *) (* C_FAMILY = "artix7" *) 
 (* C_FAULT_INJECT = "0" *) (* C_HIGHADDR = "64'b0000000000000000000000000000000000000000000000001111111111111111" *) (* C_INTERCONNECT = "0" *) 
-(* C_LMB_AWIDTH = "32" *) (* C_LMB_DWIDTH = "32" *) (* C_MASK = "64'b0000000000000000000000000000000010000001000000000000000000000000" *) 
+(* C_LMB_AWIDTH = "32" *) (* C_LMB_DWIDTH = "32" *) (* C_MASK = "64'b0000000000000000000000000000000011000000000000000000000000000000" *) 
 (* C_MASK1 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) (* C_MASK2 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) (* C_MASK3 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 
 (* C_NUM_LMB = "1" *) (* C_S_AXI_CTRL_ADDR_WIDTH = "32" *) (* C_S_AXI_CTRL_BASEADDR = "32'b11111111111111111111111111111111" *) 
 (* C_S_AXI_CTRL_DATA_WIDTH = "32" *) (* C_S_AXI_CTRL_HIGHADDR = "32'b00000000000000000000000000000000" *) (* C_UE_FAILING_REGISTERS = "0" *) 
@@ -356,14 +356,14 @@ module system_ilmb_bram_if_cntlr_0_lmb_bram_if_cntlr
     \BRAM_WEN_A[0]_INST_0 
        (.I0(LMB_WriteStrobe),
         .I1(LMB_BE[0]),
-        .I2(LMB_ABus[7]),
+        .I2(LMB_ABus[1]),
         .I3(LMB_ABus[0]),
         .O(BRAM_WEN_A[0]));
   (* SOFT_HLUTNM = "soft_lutpair0" *) 
   LUT4 #(
     .INIT(16'h1000)) 
     \BRAM_WEN_A[1]_INST_0 
-       (.I0(LMB_ABus[7]),
+       (.I0(LMB_ABus[1]),
         .I1(LMB_ABus[0]),
         .I2(LMB_WriteStrobe),
         .I3(LMB_BE[1]),
@@ -372,7 +372,7 @@ module system_ilmb_bram_if_cntlr_0_lmb_bram_if_cntlr
   LUT4 #(
     .INIT(16'h1000)) 
     \BRAM_WEN_A[2]_INST_0 
-       (.I0(LMB_ABus[7]),
+       (.I0(LMB_ABus[1]),
         .I1(LMB_ABus[0]),
         .I2(LMB_WriteStrobe),
         .I3(LMB_BE[2]),
@@ -381,7 +381,7 @@ module system_ilmb_bram_if_cntlr_0_lmb_bram_if_cntlr
   LUT4 #(
     .INIT(16'h1000)) 
     \BRAM_WEN_A[3]_INST_0 
-       (.I0(LMB_ABus[7]),
+       (.I0(LMB_ABus[1]),
         .I1(LMB_ABus[0]),
         .I2(LMB_WriteStrobe),
         .I3(LMB_BE[3]),
@@ -393,7 +393,7 @@ module system_ilmb_bram_if_cntlr_0_lmb_bram_if_cntlr
     .INIT(8'h01)) 
     \No_ECC.Sl_Rdy_i_1 
        (.I0(LMB_ABus[0]),
-        .I1(LMB_ABus[7]),
+        .I1(LMB_ABus[1]),
         .I2(LMB_Rst),
         .O(\No_ECC.Sl_Rdy_i_1_n_0 ));
   FDRE \No_ECC.Sl_Rdy_reg 
@@ -423,7 +423,7 @@ module system_ilmb_bram_if_cntlr_0_lmb_bram_if_cntlr
         .O(Sl_Ready));
 endmodule
 
-(* CHECK_LICENSE_TYPE = "system_ilmb_bram_if_cntlr_0,lmb_bram_if_cntlr,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "lmb_bram_if_cntlr,Vivado 2017.4" *) 
+(* CHECK_LICENSE_TYPE = "system_dlmb_bram_if_cntlr_0,lmb_bram_if_cntlr,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "lmb_bram_if_cntlr,Vivado 2017.4" *) 
 (* NotValidForBitStream *)
 module system_ilmb_bram_if_cntlr_0
    (LMB_Clk,
@@ -528,7 +528,7 @@ module system_ilmb_bram_if_cntlr_0
   (* C_INTERCONNECT = "0" *) 
   (* C_LMB_AWIDTH = "32" *) 
   (* C_LMB_DWIDTH = "32" *) 
-  (* C_MASK = "64'b0000000000000000000000000000000010000001000000000000000000000000" *) 
+  (* C_MASK = "64'b0000000000000000000000000000000011000000000000000000000000000000" *) 
   (* C_MASK1 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 
   (* C_MASK2 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 
   (* C_MASK3 = "64'b0000000000000000000000000000000000000000100000000000000000000000" *) 

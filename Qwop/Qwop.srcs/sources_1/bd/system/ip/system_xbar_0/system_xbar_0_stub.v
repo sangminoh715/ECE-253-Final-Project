@@ -1,10 +1,10 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-// Date        : Mon Dec  3 14:39:42 2018
+// Date        : Wed Dec  5 20:09:01 2018
 // Host        : MY-LAPTOP running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode synth_stub {D:/Xilinx/Projects/ECE-253-Final-Project/ECE 253 Final Project/ECE
-//               253 Final Project.srcs/sources_1/bd/system/ip/system_xbar_0/system_xbar_0_stub.v}
+// Command     : write_verilog -force -mode synth_stub
+//               d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_xbar_0/system_xbar_0_stub.v
 // Design      : system_xbar_0
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7a100tcsg324-1
@@ -20,14 +20,14 @@ module system_xbar_0(aclk, aresetn, s_axi_awid, s_axi_awaddr,
   s_axi_wvalid, s_axi_wready, s_axi_bid, s_axi_bresp, s_axi_bvalid, s_axi_bready, s_axi_arid, 
   s_axi_araddr, s_axi_arlen, s_axi_arsize, s_axi_arburst, s_axi_arlock, s_axi_arcache, 
   s_axi_arprot, s_axi_arqos, s_axi_arvalid, s_axi_arready, s_axi_rid, s_axi_rdata, s_axi_rresp, 
-  s_axi_rlast, s_axi_rvalid, s_axi_rready, m_axi_awaddr, m_axi_awlen, m_axi_awsize, 
+  s_axi_rlast, s_axi_rvalid, s_axi_rready, m_axi_awid, m_axi_awaddr, m_axi_awlen, m_axi_awsize, 
   m_axi_awburst, m_axi_awlock, m_axi_awcache, m_axi_awprot, m_axi_awregion, m_axi_awqos, 
   m_axi_awvalid, m_axi_awready, m_axi_wdata, m_axi_wstrb, m_axi_wlast, m_axi_wvalid, 
-  m_axi_wready, m_axi_bresp, m_axi_bvalid, m_axi_bready, m_axi_araddr, m_axi_arlen, 
-  m_axi_arsize, m_axi_arburst, m_axi_arlock, m_axi_arcache, m_axi_arprot, m_axi_arregion, 
-  m_axi_arqos, m_axi_arvalid, m_axi_arready, m_axi_rdata, m_axi_rresp, m_axi_rlast, 
-  m_axi_rvalid, m_axi_rready)
-/* synthesis syn_black_box black_box_pad_pin="aclk,aresetn,s_axi_awid[5:0],s_axi_awaddr[95:0],s_axi_awlen[23:0],s_axi_awsize[8:0],s_axi_awburst[5:0],s_axi_awlock[2:0],s_axi_awcache[11:0],s_axi_awprot[8:0],s_axi_awqos[11:0],s_axi_awvalid[2:0],s_axi_awready[2:0],s_axi_wdata[95:0],s_axi_wstrb[11:0],s_axi_wlast[2:0],s_axi_wvalid[2:0],s_axi_wready[2:0],s_axi_bid[5:0],s_axi_bresp[5:0],s_axi_bvalid[2:0],s_axi_bready[2:0],s_axi_arid[5:0],s_axi_araddr[95:0],s_axi_arlen[23:0],s_axi_arsize[8:0],s_axi_arburst[5:0],s_axi_arlock[2:0],s_axi_arcache[11:0],s_axi_arprot[8:0],s_axi_arqos[11:0],s_axi_arvalid[2:0],s_axi_arready[2:0],s_axi_rid[5:0],s_axi_rdata[95:0],s_axi_rresp[5:0],s_axi_rlast[2:0],s_axi_rvalid[2:0],s_axi_rready[2:0],m_axi_awaddr[223:0],m_axi_awlen[55:0],m_axi_awsize[20:0],m_axi_awburst[13:0],m_axi_awlock[6:0],m_axi_awcache[27:0],m_axi_awprot[20:0],m_axi_awregion[27:0],m_axi_awqos[27:0],m_axi_awvalid[6:0],m_axi_awready[6:0],m_axi_wdata[223:0],m_axi_wstrb[27:0],m_axi_wlast[6:0],m_axi_wvalid[6:0],m_axi_wready[6:0],m_axi_bresp[13:0],m_axi_bvalid[6:0],m_axi_bready[6:0],m_axi_araddr[223:0],m_axi_arlen[55:0],m_axi_arsize[20:0],m_axi_arburst[13:0],m_axi_arlock[6:0],m_axi_arcache[27:0],m_axi_arprot[20:0],m_axi_arregion[27:0],m_axi_arqos[27:0],m_axi_arvalid[6:0],m_axi_arready[6:0],m_axi_rdata[223:0],m_axi_rresp[13:0],m_axi_rlast[6:0],m_axi_rvalid[6:0],m_axi_rready[6:0]" */;
+  m_axi_wready, m_axi_bid, m_axi_bresp, m_axi_bvalid, m_axi_bready, m_axi_arid, m_axi_araddr, 
+  m_axi_arlen, m_axi_arsize, m_axi_arburst, m_axi_arlock, m_axi_arcache, m_axi_arprot, 
+  m_axi_arregion, m_axi_arqos, m_axi_arvalid, m_axi_arready, m_axi_rid, m_axi_rdata, 
+  m_axi_rresp, m_axi_rlast, m_axi_rvalid, m_axi_rready)
+/* synthesis syn_black_box black_box_pad_pin="aclk,aresetn,s_axi_awid[5:0],s_axi_awaddr[95:0],s_axi_awlen[23:0],s_axi_awsize[8:0],s_axi_awburst[5:0],s_axi_awlock[2:0],s_axi_awcache[11:0],s_axi_awprot[8:0],s_axi_awqos[11:0],s_axi_awvalid[2:0],s_axi_awready[2:0],s_axi_wdata[95:0],s_axi_wstrb[11:0],s_axi_wlast[2:0],s_axi_wvalid[2:0],s_axi_wready[2:0],s_axi_bid[5:0],s_axi_bresp[5:0],s_axi_bvalid[2:0],s_axi_bready[2:0],s_axi_arid[5:0],s_axi_araddr[95:0],s_axi_arlen[23:0],s_axi_arsize[8:0],s_axi_arburst[5:0],s_axi_arlock[2:0],s_axi_arcache[11:0],s_axi_arprot[8:0],s_axi_arqos[11:0],s_axi_arvalid[2:0],s_axi_arready[2:0],s_axi_rid[5:0],s_axi_rdata[95:0],s_axi_rresp[5:0],s_axi_rlast[2:0],s_axi_rvalid[2:0],s_axi_rready[2:0],m_axi_awid[13:0],m_axi_awaddr[223:0],m_axi_awlen[55:0],m_axi_awsize[20:0],m_axi_awburst[13:0],m_axi_awlock[6:0],m_axi_awcache[27:0],m_axi_awprot[20:0],m_axi_awregion[27:0],m_axi_awqos[27:0],m_axi_awvalid[6:0],m_axi_awready[6:0],m_axi_wdata[223:0],m_axi_wstrb[27:0],m_axi_wlast[6:0],m_axi_wvalid[6:0],m_axi_wready[6:0],m_axi_bid[13:0],m_axi_bresp[13:0],m_axi_bvalid[6:0],m_axi_bready[6:0],m_axi_arid[13:0],m_axi_araddr[223:0],m_axi_arlen[55:0],m_axi_arsize[20:0],m_axi_arburst[13:0],m_axi_arlock[6:0],m_axi_arcache[27:0],m_axi_arprot[20:0],m_axi_arregion[27:0],m_axi_arqos[27:0],m_axi_arvalid[6:0],m_axi_arready[6:0],m_axi_rid[13:0],m_axi_rdata[223:0],m_axi_rresp[13:0],m_axi_rlast[6:0],m_axi_rvalid[6:0],m_axi_rready[6:0]" */;
   input aclk;
   input aresetn;
   input [5:0]s_axi_awid;
@@ -67,6 +67,7 @@ module system_xbar_0(aclk, aresetn, s_axi_awid, s_axi_awaddr,
   output [2:0]s_axi_rlast;
   output [2:0]s_axi_rvalid;
   input [2:0]s_axi_rready;
+  output [13:0]m_axi_awid;
   output [223:0]m_axi_awaddr;
   output [55:0]m_axi_awlen;
   output [20:0]m_axi_awsize;
@@ -83,9 +84,11 @@ module system_xbar_0(aclk, aresetn, s_axi_awid, s_axi_awaddr,
   output [6:0]m_axi_wlast;
   output [6:0]m_axi_wvalid;
   input [6:0]m_axi_wready;
+  input [13:0]m_axi_bid;
   input [13:0]m_axi_bresp;
   input [6:0]m_axi_bvalid;
   output [6:0]m_axi_bready;
+  output [13:0]m_axi_arid;
   output [223:0]m_axi_araddr;
   output [55:0]m_axi_arlen;
   output [20:0]m_axi_arsize;
@@ -97,6 +100,7 @@ module system_xbar_0(aclk, aresetn, s_axi_awid, s_axi_awaddr,
   output [27:0]m_axi_arqos;
   output [6:0]m_axi_arvalid;
   input [6:0]m_axi_arready;
+  input [13:0]m_axi_rid;
   input [223:0]m_axi_rdata;
   input [13:0]m_axi_rresp;
   input [6:0]m_axi_rlast;

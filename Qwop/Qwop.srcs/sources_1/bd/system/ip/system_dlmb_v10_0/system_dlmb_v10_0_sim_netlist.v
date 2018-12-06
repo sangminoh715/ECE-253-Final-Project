@@ -1,11 +1,10 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-// Date        : Fri Nov 30 01:30:10 2018
+// Date        : Wed Dec  5 20:08:22 2018
 // Host        : MY-LAPTOP running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim {d:/sangm/Documents/UCSB/4th Year/Fall/ECE
-//               253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final
-//               Project.srcs/sources_1/bd/system/ip/system_dlmb_v10_0/system_dlmb_v10_0_sim_netlist.v}
+// Command     : write_verilog -force -mode funcsim
+//               d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_dlmb_v10_0/system_dlmb_v10_0_sim_netlist.v
 // Design      : system_dlmb_v10_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.

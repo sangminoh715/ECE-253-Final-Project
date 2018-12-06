@@ -1,11 +1,11 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
--- Date        : Fri Nov 30 01:31:35 2018
+-- Date        : Wed Dec  5 20:09:09 2018
 -- Host        : MY-LAPTOP running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim -rename_top system_dlmb_bram_if_cntlr_0 -prefix
---               system_dlmb_bram_if_cntlr_0_ system_ilmb_bram_if_cntlr_0_sim_netlist.vhdl
--- Design      : system_ilmb_bram_if_cntlr_0
+-- Command     : write_vhdl -force -mode funcsim
+--               d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_dlmb_bram_if_cntlr_0/system_dlmb_bram_if_cntlr_0_sim_netlist.vhdl
+-- Design      : system_dlmb_bram_if_cntlr_0
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
 -- Device      : xc7a100tcsg324-1
@@ -121,7 +121,7 @@ entity system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr is
   attribute C_LMB_DWIDTH : integer;
   attribute C_LMB_DWIDTH of system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr : entity is 32;
   attribute C_MASK : string;
-  attribute C_MASK of system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000010000001000000000000000000000000";
+  attribute C_MASK of system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000011000000000000000000000000000000";
   attribute C_MASK1 : string;
   attribute C_MASK1 of system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr : entity is "64'b0000000000000000000000000000000000000000100000000000000000000000";
   attribute C_MASK2 : string;
@@ -142,6 +142,8 @@ entity system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr is
   attribute C_UE_FAILING_REGISTERS of system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr : entity is 0;
   attribute C_WRITE_ACCESS : integer;
   attribute C_WRITE_ACCESS of system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr : entity is 2;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr : entity is "lmb_bram_if_cntlr";
 end system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr;
 
 architecture STRUCTURE of system_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr is
@@ -336,7 +338,7 @@ begin
         port map (
       I0 => LMB_WriteStrobe,
       I1 => LMB_BE(0),
-      I2 => \^lmb_abus\(7),
+      I2 => \^lmb_abus\(1),
       I3 => \^lmb_abus\(0),
       O => BRAM_WEN_A(0)
     );
@@ -345,7 +347,7 @@ begin
       INIT => X"1000"
     )
         port map (
-      I0 => \^lmb_abus\(7),
+      I0 => \^lmb_abus\(1),
       I1 => \^lmb_abus\(0),
       I2 => LMB_WriteStrobe,
       I3 => LMB_BE(1),
@@ -356,7 +358,7 @@ begin
       INIT => X"1000"
     )
         port map (
-      I0 => \^lmb_abus\(7),
+      I0 => \^lmb_abus\(1),
       I1 => \^lmb_abus\(0),
       I2 => LMB_WriteStrobe,
       I3 => LMB_BE(2),
@@ -367,7 +369,7 @@ begin
       INIT => X"1000"
     )
         port map (
-      I0 => \^lmb_abus\(7),
+      I0 => \^lmb_abus\(1),
       I1 => \^lmb_abus\(0),
       I2 => LMB_WriteStrobe,
       I3 => LMB_BE(3),
@@ -383,7 +385,7 @@ GND: unisim.vcomponents.GND
     )
         port map (
       I0 => \^lmb_abus\(0),
-      I1 => \^lmb_abus\(7),
+      I1 => \^lmb_abus\(1),
       I2 => LMB_Rst,
       O => \No_ECC.Sl_Rdy_i_1_n_0\
     );
@@ -452,7 +454,7 @@ entity system_dlmb_bram_if_cntlr_0 is
   attribute NotValidForBitStream : boolean;
   attribute NotValidForBitStream of system_dlmb_bram_if_cntlr_0 : entity is true;
   attribute CHECK_LICENSE_TYPE : string;
-  attribute CHECK_LICENSE_TYPE of system_dlmb_bram_if_cntlr_0 : entity is "system_ilmb_bram_if_cntlr_0,lmb_bram_if_cntlr,{}";
+  attribute CHECK_LICENSE_TYPE of system_dlmb_bram_if_cntlr_0 : entity is "system_dlmb_bram_if_cntlr_0,lmb_bram_if_cntlr,{}";
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of system_dlmb_bram_if_cntlr_0 : entity is "yes";
   attribute x_core_info : string;
@@ -515,7 +517,7 @@ architecture STRUCTURE of system_dlmb_bram_if_cntlr_0 is
   attribute C_LMB_DWIDTH : integer;
   attribute C_LMB_DWIDTH of U0 : label is 32;
   attribute C_MASK : string;
-  attribute C_MASK of U0 : label is "64'b0000000000000000000000000000000010000001000000000000000000000000";
+  attribute C_MASK of U0 : label is "64'b0000000000000000000000000000000011000000000000000000000000000000";
   attribute C_MASK1 : string;
   attribute C_MASK1 of U0 : label is "64'b0000000000000000000000000000000000000000100000000000000000000000";
   attribute C_MASK2 : string;

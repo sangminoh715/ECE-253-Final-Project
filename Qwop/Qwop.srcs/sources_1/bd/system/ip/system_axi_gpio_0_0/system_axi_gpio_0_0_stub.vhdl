@@ -1,11 +1,10 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
--- Date        : Fri Nov 30 01:35:39 2018
+-- Date        : Wed Dec  5 20:06:51 2018
 -- Host        : MY-LAPTOP running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode synth_stub {d:/sangm/Documents/UCSB/4th Year/Fall/ECE
---               253/ECE-253-Final-Project/ECE 253 Final Project/ECE 253 Final
---               Project.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_stub.vhdl}
+-- Command     : write_vhdl -force -mode synth_stub
+--               d:/Xilinx/Projects/ECE-253-Final-Project/Qwop/Qwop.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_stub.vhdl
 -- Design      : system_axi_gpio_0_0
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7a100tcsg324-1

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1543878757">
+<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1544070536">
   <File Type="PWROPT-DCP" Name="system_wrapper_pwropt.dcp"/>
   <File Type="ROUTE-PWR" Name="system_wrapper_power_routed.rpt"/>
   <File Type="PA-TCL" Name="system_wrapper.tcl"/>
@@ -67,8 +67,6 @@
     <Filter Type="Srcs"/>
     <File Path="$PSRCDIR/sources_1/bd/system/system.bd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../ECE 253 Final Project/ECE 253 Final Project.srcs/sources_1/bd/system/system.bd"/>
-        <Attr Name="ImportTime" Val="1543876564"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -76,8 +74,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/bd/system/hdl/system_wrapper.v">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../ECE 253 Final Project/ECE 253 Final Project.srcs/sources_1/bd/system/hdl/system_wrapper.v"/>
-        <Attr Name="ImportTime" Val="1543876571"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -85,8 +81,6 @@
     </File>
     <File Path="$PSRCDIR/sources_1/bd/system/ip/system_mig_7series_0_0/mig_a.prj">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../ECE 253 Final Project/ECE 253 Final Project.srcs/sources_1/bd/system/ip/system_mig_7series_0_0/mig_a.prj"/>
-        <Attr Name="ImportTime" Val="1543876533"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="ScopedToCell" Val="system_mig_7series_0_0"/>
       </FileInfo>
@@ -102,7 +96,7 @@
     <File Path="$PSRCDIR/constrs_1/imports/Lab Files/Nexys4_Handout_2018.xdc">
       <FileInfo>
         <Attr Name="ImportPath" Val="$PPRDIR/../Lab Files/Nexys4_Handout_2018.xdc"/>
-        <Attr Name="ImportTime" Val="1538877024"/>
+        <Attr Name="ImportTime" Val="1543960134"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
       </FileInfo>
@@ -112,7 +106,9 @@
     </Config>
   </FileSet>
   <Strategy Version="1" Minor="2">
-    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
+      <Desc>Default settings for Implementation.</Desc>
+    </StratHandle>
     <Step Id="init_design"/>
     <Step Id="opt_design"/>
     <Step Id="power_opt_design"/>
@@ -123,12 +119,21 @@
     <Step Id="post_route_phys_opt_design"/>
     <Step Id="write_bitstream"/>
   </Strategy>
-  <BlockFileSet Type="BlockSrcs" Name="system_auto_pc_5"/>
-  <BlockFileSet Type="BlockSrcs" Name="system_auto_pc_4"/>
-  <BlockFileSet Type="BlockSrcs" Name="system_auto_pc_7"/>
-  <BlockFileSet Type="BlockSrcs" Name="system_auto_pc_6"/>
-  <BlockFileSet Type="BlockSrcs" Name="system_auto_pc_3"/>
-  <BlockFileSet Type="BlockSrcs" Name="system_auto_pc_2"/>
-  <BlockFileSet Type="BlockSrcs" Name="system_auto_pc_0"/>
-  <BlockFileSet Type="BlockSrcs" Name="system_auto_pc_1"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_mig_7series_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_microblaze_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_axi_gpio_0_2"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_ilmb_bram_if_cntlr_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_axi_timer_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_microblaze_0_axi_intc_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_mdm_1_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_microblaze_0_xlconcat_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_rst_mig_7series_0_100M_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_axi_gpio_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_clk_wiz_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_axi_tft_0_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_xbar_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_dlmb_v10_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_ilmb_v10_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_dlmb_bram_if_cntlr_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_lmb_bram_0"/>
 </GenRun>
