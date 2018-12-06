@@ -34,15 +34,16 @@
 #define CALF_LENGTH		140
 
 #define PI				3.141592653
-#define MAX_THIGH_ANGLE	4.71238898
+#define MAX_THIGH_ANGLE	5*PI/8
 
 #define sgn(x) ((x<0)?-1:((x>0)?1:0)) // return sign of a number
 
-XGpio led;
-XGpio btn;
-XTmrCtr timer;
+static XGpio led;
+static XGpio btn;
+static XTmrCtr timer;
+static XTft TftInstance;
 
-XIntc interrupt;
+static XIntc interrupt;
 
 volatile u32 * TFT = (u32 *)XPAR_AXI_TFT_0_BASEADDR;
 
@@ -58,6 +59,15 @@ struct part left_calf, right_calf;
 struct part torso;
 
 int refPos = WIDTH, oldRefPos = WIDTH;
+
+u16 leds = 0x0000;
+int controls[5] = {0,	// Q = Right Thigh
+                   0, 	// W = Left Thigh
+                   0, 	// O = Left Calf
+                   0, 	// P = Right Calf
+                   0};	// RESET
+int leftInFront = 1;
+int resetPressed = 0;
 
 /* -------------------- Functions -------------------- */
 
@@ -83,17 +93,11 @@ void UpdateRefPos(void);
 }
 
 int main() {
-
-	static XTft TftInstance;
+	//print("---Entering main---\n\r");
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-	//print("---Entering main---\n\r");
 
-	// Initialize body-part parameters
-
-	/*---------------------------------------------------*/
-	/*---------------Setup VGA Interface ----------------*/
-	/*---------------------------------------------------*/
+	// Initialize TFT Controller
 
 	int Status;
 	XTft_Config *TftConfigPtr;
@@ -112,18 +116,14 @@ int main() {
 	// Change Video Memory Base Address from default value to a valid Memory Address.
 	XTft_SetFrameBaseAddr(&TftInstance, FRAME_BUFFER_0_ADDR);
 
-	//*(TFT) = FRAME_BUFFER_0_ADDR;	 // Point TFT to address of frame buffer
-
-	/*---------------------------------------------------*/
-	/*--------------End VGA Interface Setup--------------*/
-	/*---------------------------------------------------*/
-
 	// Initialize GPIO Peripherals
+
 	XGpio_Initialize(&led, XPAR_GPIO_1_DEVICE_ID);
 	XGpio_Initialize(&btn, XPAR_GPIO_3_DEVICE_ID);
 	XGpio_SetDataDirection(&btn, GPIO_CHANNEL, 0xF);
 
 	// Initialize Interrupt Controller
+
 	XIntc_Initialize(&interrupt, XPAR_MICROBLAZE_0_AXI_INTC_DEVICE_ID);
 
 	XIntc_Connect(&interrupt, XPAR_MICROBLAZE_0_AXI_INTC_AXI_TIMER_0_INTERRUPT_INTR, (XInterruptHandler) TimerInterruptHandler, &timer);
@@ -136,39 +136,28 @@ int main() {
 	XTmrCtr_Start(&timer, 0);
 
 	// Register interrupt handling with Microblaze
+
 	microblaze_register_handler((XInterruptHandler) XIntc_DeviceInterruptHandler, (void*) XPAR_MICROBLAZE_0_AXI_INTC_DEVICE_ID);
 	microblaze_enable_interrupts();
 
+	// Initialize the body part parameters and draw the initial position
 	InitializeParameters();
 	InitScreen();
 
-	// This is a simulation to show functioning trig
-	while (1) {
-		DrawBar(torso.x1, torso.y1, torso.x2, torso.y2, WHITE); //Draw torso
-		FillCircle(WIDTH/2, 55, 55, WHITE); // Draw head
-//		for (int j = 0; j < 300000; j++);
-//		angles[0] -= 0.1;
-//		angles[2] -= 0.1;
-//		if (angles[0] <= -PI*2)
-//			angles[0] = 0;
-//		if (angles[2] <= -PI*2)
-//			angles[2] = 0;
+	while(1) {
+		DRAW_HEAD;
+		DRAW_TORSO;
+
 		UpdateAndDisplayBody();
 	}
 
-	//print("---Exiting main---\n\r");
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
+	//print("---Exiting main---\n\r");
+
 	return 0;
 }
 
-// controls[0] = Q
-// controls[1] = W
-// controls[2] = O
-// controls[3] = P
-// controls[4] = Reset
-u16 leds = 0x0000;
-int controls[5] = {0, 0, 0, 0, 0};
 void TimerInterruptHandler(void) {
 	int i;
 	u32 ControlStatusReg;
@@ -176,39 +165,64 @@ void TimerInterruptHandler(void) {
 
 	// Read the inputs
 	u32 inputs = XGpio_DiscreteRead(&btn, GPIO_CHANNEL);
-	for(i=0; i<5; ++i)
+	for(i=0; i<5; ++i) {
 		controls[i] = (inputs & (0x00000001 << i)) ? 1 : 0;
+		XGpio_DiscreteWrite(&led, GPIO_CHANNEL, leds | (controls[i] << i)); // Turn on LED if button is pressed (for physical sanity check)
+	}
 
 	// Handle RESET
-	{
+	if(controls[4]) {
+		InitializeParameters();
+		InitScreen();
+		resetPressed = 1;
+	} else {
+		resetPressed = 0;
+
 		// Update Based on the inputs
 		for(i=0; i<4; ++i) {
-			XGpio_DiscreteWrite(&led, GPIO_CHANNEL, leds | (controls[i] << i));
+			if(controls[i]) {
+				switch(i) {
+				case 0: // Q is pressed
+					if(right_thigh.angle > -MAX_THIGH_ANGLE && right_thigh.angle < MAX_THIGH_ANGLE) {
+						right_thigh.angle += 0.005;
+						right_calf.angle += 0.005;
+					}
+					break;
+				case 1: // W is pressed
+					if(left_thigh.angle > -MAX_THIGH_ANGLE && left_thigh.angle < MAX_THIGH_ANGLE) {
+						left_thigh.angle += 0.005;
+						left_calf.angle += 0.005;
+					}
+					break;
+				case 2: // O is pressed
+					if(left_calf.angle > (left_thigh.angle - 7 * PI / 8) && left_calf.angle < (left_thigh.angle))
+						left_calf.angle -= 0.005;
+					break;
+				case 3: // P is pressed
+					if(right_calf.angle > (right_thigh.angle - 7 * PI / 8) && right_calf.angle < (right_thigh.angle))
+						right_calf.angle -= 0.005;
+					break;
+				}
+			}
 		}
 	}
 
 	XTmrCtr_WriteReg(timer.BaseAddress, 0, XTC_TCSR_OFFSET, ControlStatusReg | XTC_CSR_INT_OCCURED_MASK);
-
-
-//	This timer will fire every 2 ms (polling).
-//	Every time it fires, it will use DiscreteRead() and check status of GPIO pins.
-//	We're using GPIO for now - we'll set up AnalogRead() for flex sensors later.
-//
-//	What this handler does:
-//		- Updates values of angles[4] depending on user input
-//		- After updating, calls UpdateAndDisplayBody()
-
 }
 
 void DrawBar(int x0, int x1, int y0, int y1, u32 color) {
+	if(resetPressed) return;
+
 	for (int row = y0; row < y1; row++)
 		for (int col = x0; col < x1; col++)
-			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*row + 4*col,color);
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*row + 4*col, color);
 }
 
 // Draw line using Bresenham's algorithm
 void DrawLine(int x1, int y1, int x2, int y2, u32 color) {
-	int i,dx,dy,sdx,sdy,dxabs,dyabs,x,y,px,py;
+	if(resetPressed) return;
+
+	int i, dx, dy, sdx, sdy, dxabs, dyabs, x, y, px, py;
 
 	dx = x2 - x1;      /* the horizontal distance of the line */
 	dy = y2 - y1;      /* the vertical distance of the line */
@@ -221,7 +235,7 @@ void DrawLine(int x1, int y1, int x2, int y2, u32 color) {
 	px = x1;
 	py = y1;
 
-	Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*py + 4*px,color);
+	Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*py + 4*px, color);
 
 	if (dxabs>=dyabs) { /* the line is more horizontal than vertical */
 		for(i=0;i<dxabs;i++) {
@@ -231,10 +245,9 @@ void DrawLine(int x1, int y1, int x2, int y2, u32 color) {
 				py+=sdy;
 			}
 			px+=sdx;
-			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*py + 4*px,color);
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*py + 4*px, color);
 		}
-	}
-	else {/* the line is more vertical than horizontal */
+	} else { /* the line is more vertical than horizontal */
 		for(i=0;i<dyabs;i++) {
 			x+=dxabs;
 			if (x>=dyabs) {
@@ -242,12 +255,14 @@ void DrawLine(int x1, int y1, int x2, int y2, u32 color) {
 				px+=sdx;
 			}
 			py+=sdy;
-			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*py + 4*px,color);
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*py + 4*px, color);
 		}
 	}
 }
 
 void FillCircle(int x0, int y0, int r, u32 color) {
+	if(resetPressed) return;
+
 	uint8_t corners = 3;
 	int16_t delta = 0;
 
@@ -315,9 +330,12 @@ void InitializeParameters(void) {
 	torso.x2 = WIDTH/2 + 1;
 	torso.y2 = HEIGHT/2;
 	torso.angle = 0;
+
+	refPos = WIDTH;
+	oldRefPos = WIDTH;
 }
 
-// Black screen and add ref point
+// Initialize screen and add reference point
 void InitScreen(void) {
 	DRAW_BG;
 	UpdateRefPos(); //Show reference point
@@ -339,6 +357,9 @@ void UpdateAndDisplayBody() {
 	//Update leg array values
 	UpdateBody();
 
+	// Draw the reference point
+	UpdateRefPos();
+
 	// Sets new positions to white
 	DrawLine(left_thigh.x1 , left_thigh.y1 , left_thigh.x2 , left_thigh.y2 , WHITE);
 	DrawLine(left_calf.x1  , left_calf.y1  , left_calf.x2  , left_calf.y2  , WHITE);
@@ -348,7 +369,6 @@ void UpdateAndDisplayBody() {
 
 // Update leg array values
 void UpdateBody(void) {
-
 	// Use trig functions to calculate new values - based on input
 	left_thigh.x2 = WIDTH/2 + THIGH_LENGTH * sin(left_thigh.angle);
 	left_thigh.y2 = HEIGHT/2 + THIGH_LENGTH * cos(left_thigh.angle);
