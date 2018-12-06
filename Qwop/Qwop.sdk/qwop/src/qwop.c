@@ -7,59 +7,89 @@
 
 #include <math.h>
 #include <stdio.h>
-#include "xparameters.h"
+#include <stdlib.h>
+#include "xgpio.h"
 #include "xil_cache.h"
+#include "xintc.h"
+#include "xparameters.h"
 #include "xtft.h"
+#include "xtmrctr.h"
+#include "xtmrctr_l.h"
 
-#define FRAME_BUFFER_0_ADDR XPAR_MIG_7SERIES_0_BASEADDR
+/* -------------------- Definitions -------------------- */
 
-/*-----Function Definitions-----*/
+#define FRAME_BUFFER_0_ADDR 	XPAR_MIG_7SERIES_0_BASEADDR
+
+#define RESET_VALUE		0x30D40
+#define GPIO_CHANNEL	1
+
+#define BLACK	0x00000000
+#define WHITE	0xFFFFFFFF
+
+#define WIDTH	640
+#define HEIGHT	480
+#define GROUND	460
+
+#define THIGH_LENGTH	140
+#define CALF_LENGTH		140
+
+#define PI				3.141592653
+#define MAX_THIGH_ANGLE	4.71238898
+
+#define sgn(x) ((x<0)?-1:((x>0)?1:0)) // return sign of a number
+
+XGpio led;
+XGpio btn;
+XTmrCtr timer;
+
+XIntc interrupt;
+
+volatile u32 * TFT = (u32 *)XPAR_AXI_TFT_0_BASEADDR;
+
+struct part {
+	int length;		// length of body part
+	int x1, y1;		// endpoint 1
+	int x2, y2;		// endpoint 2
+	float angle;	// angle of body part with respect to neg. y-axis
+};
+
+struct part left_thigh, right_thigh;
+struct part left_calf, right_calf;
+struct part torso;
+
+int refPos = WIDTH, oldRefPos = WIDTH;
+
+/* -------------------- Functions -------------------- */
 
 void TimerInterruptHandler(void);
 
-// Helper functions
-void InitScreen(void);
+// Drawing Functions
 void DrawLine(int x1, int y1, int x2, int y2, u32 color);
 void DrawBar(int x0, int x1, int y0, int y1, u32 color);
 void FillCircle(int x,int y, int radius, u32 color);
+void InitializeParameters(void);
+void InitScreen(void);
 
-// QWOP functions
+// QWOP Functions
 void UpdateAndDisplayBody(void);
 void UpdateBody(void);
 void UpdateRefPos(void);
 
-void TimerInterruptHandler(void);
+#define DRAW_BG		DrawBar(0, WIDTH, 0, HEIGHT, BLACK)
+#define DRAW_HEAD	FillCircle(WIDTH/2, 55, 55, WHITE)
+#define DRAW_TORSO	{\
+	DrawLine(WIDTH/2, 0, WIDTH/2, HEIGHT/2, WHITE);\
+	DrawBar(torso.x1, torso.y1, torso.x2, torso.y2, WHITE);\
+}
 
-volatile u32 * TFT = (u32 *)XPAR_AXI_TFT_0_BASEADDR;
-
-#define MAX_X 639
-#define MAX_Y 479
-#define GROUND 460
-#define sgn(x) ((x<0)?-1:((x>0)?1:0)) // return sign of a number
-
-// Global Variables
-int refPos = MAX_X, oldRefPos = MAX_X;
-int thigh_length = 140, knee_length = 140;
-
-// Define Limb Positions (Vertices)
-// Parameters: x1, y1, x2, y2
-int torso[4] = {MAX_X/2 - 2, 110, MAX_X/2 + 2, MAX_Y/2};
-int left_thigh[4] = {MAX_X/2, MAX_Y/2, MAX_X/2 + 60, MAX_Y/2 + 50};
-int left_knee[4] = {MAX_X/2 + 60, MAX_Y/2 + 50, MAX_X/2 + 60, GROUND};
-int right_thigh[4] = {MAX_X/2, MAX_Y/2, MAX_X/2 - 60, MAX_Y/2 + 50};
-int right_knee[4] = {MAX_X/2 - 60, MAX_Y/2 + 50, MAX_X/2 - 60, GROUND};
-
-// limb angles. both thigh/knee angles are relative to Y-axis (0 rads if leg perpendicular to ground)
-float angles[4]; //0: left thigh, 1: left knee, 2: right thigh, 3: right knee
-float PI = 3.141592653;
-float MAX_THIGH_ANGLE = 4.71238898; //lower threshold is its negative value
-
-int main () {
+int main() {
 
 	static XTft TftInstance;
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-	print("---Entering main---\n\r");
+	//print("---Entering main---\n\r");
+
+	// Initialize body-part parameters
 
 	/*---------------------------------------------------*/
 	/*---------------Setup VGA Interface ----------------*/
@@ -70,13 +100,11 @@ int main () {
 
 	// Get address of the XTft_Config structure for the given device id.
 	TftConfigPtr = XTft_LookupConfig(XPAR_AXI_TFT_0_DEVICE_ID);
-	if (TftConfigPtr == (XTft_Config *)NULL)
-		return XST_FAILURE;
+	if (TftConfigPtr == (XTft_Config *)NULL) return XST_FAILURE;
 
 	// Initialize all the TftInstance members and fill screen with default bg color.
 	Status = XTft_CfgInitialize(&TftInstance, TftConfigPtr, TftConfigPtr->BaseAddress);
-	if (Status != XST_SUCCESS)
-		return XST_FAILURE;
+	if (Status != XST_SUCCESS) return XST_FAILURE;
 
 	// Wait till Video address latch status bit is set before writing (ensure no data flicker)
 	while (XTft_GetVsyncStatus(&TftInstance) != XTFT_IESR_VADDRLATCH_STATUS_MASK);
@@ -90,35 +118,77 @@ int main () {
 	/*--------------End VGA Interface Setup--------------*/
 	/*---------------------------------------------------*/
 
-	// Setup timer interrupt - use Polling every 2 ms
+	// Initialize GPIO Peripherals
+	XGpio_Initialize(&led, XPAR_GPIO_1_DEVICE_ID);
+	XGpio_Initialize(&btn, XPAR_GPIO_3_DEVICE_ID);
+	XGpio_SetDataDirection(&btn, GPIO_CHANNEL, 0xF);
 
-	// JOSH: CAN YOU SET UP POLLING INTERRUPT?
-	// ALSO SETUP GPIO PINS FOR NOW FOR TESTING
+	// Initialize Interrupt Controller
+	XIntc_Initialize(&interrupt, XPAR_MICROBLAZE_0_AXI_INTC_DEVICE_ID);
 
+	XIntc_Connect(&interrupt, XPAR_MICROBLAZE_0_AXI_INTC_AXI_TIMER_0_INTERRUPT_INTR, (XInterruptHandler) TimerInterruptHandler, &timer);
+	XIntc_Start(&interrupt, XIN_REAL_MODE);
+	XIntc_Enable(&interrupt, XPAR_MICROBLAZE_0_AXI_INTC_AXI_TIMER_0_INTERRUPT_INTR);
+
+	XTmrCtr_Initialize(&timer, XPAR_MICROBLAZE_0_AXI_INTC_DEVICE_ID);
+	XTmrCtr_SetOptions(&timer, 0, XTC_INT_MODE_OPTION | XTC_AUTO_RELOAD_OPTION);
+	XTmrCtr_SetResetValue(&timer, 0, 0xFFFFFFFF - RESET_VALUE);
+	XTmrCtr_Start(&timer, 0);
+
+	// Register interrupt handling with Microblaze
+	microblaze_register_handler((XInterruptHandler) XIntc_DeviceInterruptHandler, (void*) XPAR_MICROBLAZE_0_AXI_INTC_DEVICE_ID);
+	microblaze_enable_interrupts();
+
+	InitializeParameters();
 	InitScreen();
 
 	// This is a simulation to show functioning trig
 	while (1) {
-		DrawBar(torso[0], torso[2], torso[1], torso[3], 0x00F0FC00); //Draw torso
-		FillCircle(MAX_X/2, 55, 55, 0x00F0FC00); // Draw head
-		for (int j = 0; j < 300000; j++);
-		angles[0] -= 0.1;
-		angles[2] -= 0.1;
-		if (angles[0] <= -PI*2)
-			angles[0] = 0;
-		if (angles[2] <= -PI*2)
-			angles[2] = 0;
+		DrawBar(torso.x1, torso.y1, torso.x2, torso.y2, WHITE); //Draw torso
+		FillCircle(WIDTH/2, 55, 55, WHITE); // Draw head
+//		for (int j = 0; j < 300000; j++);
+//		angles[0] -= 0.1;
+//		angles[2] -= 0.1;
+//		if (angles[0] <= -PI*2)
+//			angles[0] = 0;
+//		if (angles[2] <= -PI*2)
+//			angles[2] = 0;
 		UpdateAndDisplayBody();
 	}
 
-	print("---Exiting main---\n\r");
+	//print("---Exiting main---\n\r");
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
 	return 0;
 }
 
-// Interrupt Handler - JOSH, CAN YOU WRITE THIS
+// controls[0] = Q
+// controls[1] = W
+// controls[2] = O
+// controls[3] = P
+// controls[4] = Reset
+u16 leds = 0x0000;
+int controls[5] = {0, 0, 0, 0, 0};
 void TimerInterruptHandler(void) {
+	int i;
+	u32 ControlStatusReg;
+	ControlStatusReg = XTimerCtr_ReadReg(timer.BaseAddress, 0, XTC_TCSR_OFFSET);
+
+	// Read the inputs
+	u32 inputs = XGpio_DiscreteRead(&btn, GPIO_CHANNEL);
+	for(i=0; i<5; ++i)
+		controls[i] = (inputs & (0x00000001 << i)) ? 1 : 0;
+
+	// Handle RESET
+	{
+		// Update Based on the inputs
+		for(i=0; i<4; ++i) {
+			XGpio_DiscreteWrite(&led, GPIO_CHANNEL, leds | (controls[i] << i));
+		}
+	}
+
+	XTmrCtr_WriteReg(timer.BaseAddress, 0, XTC_TCSR_OFFSET, ControlStatusReg | XTC_CSR_INT_OCCURED_MASK);
+
 
 //	This timer will fire every 2 ms (polling).
 //	Every time it fires, it will use DiscreteRead() and check status of GPIO pins.
@@ -130,61 +200,10 @@ void TimerInterruptHandler(void) {
 
 }
 
-// Black screen and add ref point
-void InitScreen(void) {
-	DrawBar(0, MAX_X, 0, MAX_Y, 0x00000000);
-	UpdateRefPos(); //Show reference point
-	FillCircle(MAX_X/2, 55, 55, 0x00F0FC00); // Draw head
-	DrawLine(MAX_X/2, 0, MAX_X/2, MAX_Y/2, 0x00F0FC00);
-	DrawBar(torso[0], torso[2], torso[1], torso[3], 0x00F0FC00); //Draw torso
-
-	//Initialize angles
-	angles[0] = PI/4; 	// left thigh
-	angles[1] = -PI/8;	// left knee
-	angles[2] = 0;		// right thigh
-	angles[3] = -PI/4;	// right knee
-
-	UpdateAndDisplayBody();
-}
-
-// Display updated body
-void UpdateAndDisplayBody() {
-	// Resets previous positions to black
-	DrawLine(left_thigh[0], left_thigh[1], left_thigh[2], left_thigh[3], 0x00000000); //left thigh
-	DrawLine(left_knee[0], left_knee[1], left_knee[2], left_knee[3], 0x00000000); //left knee
-	DrawLine(right_thigh[0], right_thigh[1], right_thigh[2], right_thigh[3], 0x00000000); //right thigh
-	DrawLine(right_knee[0], right_knee[1], right_knee[2], right_knee[3], 0x00000000); //right knee
-
-	//Update leg array values
-	UpdateBody();
-
-	// Sets new positions to white
-	DrawLine(left_thigh[0], left_thigh[1], left_thigh[2], left_thigh[3], 0xFFFFFFFF); //left thigh
-	DrawLine(left_knee[0], left_knee[1], left_knee[2], left_knee[3], 0xFFFFFFFF); //left knee
-	DrawLine(right_thigh[0], right_thigh[1], right_thigh[2], right_thigh[3], 0xFFFFFFFF); //right thigh
-	DrawLine(right_knee[0], right_knee[1], right_knee[2], right_knee[3], 0xFFFFFFFF); //right knee
-
-//	UpdateRefPos();
-}
-
-// Update leg array values
-void UpdateBody(void) {
-
-	// Use trig functions to calculate new values - based on input
-	left_thigh[2] = MAX_X/2 + thigh_length * sin(angles[0]);
-	left_thigh[3] = MAX_Y/2 + thigh_length * cos(angles[0]);
-	left_knee[0] = left_thigh[2];
-	left_knee[1] = left_thigh[3];
-	left_knee[2] = left_thigh[2] + knee_length * sin(angles[1]);
-	left_knee[3] = left_thigh[3] + knee_length * cos(angles[1]);
-
-	right_thigh[2] = MAX_X/2 + thigh_length * sin(angles[2]);
-	right_thigh[3] = MAX_Y/2 + thigh_length * cos(angles[2]);
-	right_knee[0] = right_thigh[2];
-	right_knee[1] = right_thigh[3];
-	right_knee[2] = right_thigh[2] + knee_length * sin(angles[3]);
-	right_knee[3] = right_thigh[3] + knee_length * cos(angles[3]);
-
+void DrawBar(int x0, int x1, int y0, int y1, u32 color) {
+	for (int row = y0; row < y1; row++)
+		for (int col = x0; col < x1; col++)
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*row + 4*col,color);
 }
 
 // Draw line using Bresenham's algorithm
@@ -228,18 +247,6 @@ void DrawLine(int x1, int y1, int x2, int y2, u32 color) {
 	}
 }
 
-void UpdateRefPos(void) {
-	DrawBar(oldRefPos-10, oldRefPos, 440, 460, 0x00000000); //clear existing
-	DrawBar(refPos-10, refPos, 440, 460, 0x0000FC00); //update point
-	oldRefPos = refPos;
-}
-
-void DrawBar(int x0, int x1, int y0, int y1, u32 color) {
-	for (int row = y0; row < y1; row++)
-		for (int col = x0; col < x1; col++)
-			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*row + 4*col,color); //0x000000FC for blue, 0x0000FC00 for green, 0x00FC0000 for red
-}
-
 void FillCircle(int x0, int y0, int r, u32 color) {
 	uint8_t corners = 3;
 	int16_t delta = 0;
@@ -276,4 +283,91 @@ void FillCircle(int x0, int y0, int r, u32 color) {
         }
         px = x;
     }
+}
+
+void InitializeParameters(void) {
+	left_thigh.x1 = WIDTH/2;
+	left_thigh.y1 = HEIGHT/2;
+	left_thigh.x2 = WIDTH/2 + 60;
+	left_thigh.y2 = HEIGHT/2 + 50;
+	left_thigh.angle = PI/4;
+
+	right_thigh.x1 = WIDTH/2;
+	right_thigh.y1 = HEIGHT/2;
+	right_thigh.x2 = WIDTH/2 - 60;
+	right_thigh.y2 = HEIGHT/2 + 50;
+	right_thigh.angle = 0;
+
+	left_calf.x1 = WIDTH/2 + 60;
+	left_calf.y1 = HEIGHT/2 + 50;
+	left_calf.x2 = WIDTH/2 + 60;
+	left_calf.y2 = GROUND;
+	left_calf.angle = -PI/8;
+
+	right_calf.x1 = WIDTH/2 - 60;
+	right_calf.y1 = HEIGHT/2 + 50;
+	right_calf.x2 = WIDTH/2 - 60;
+	right_calf.y2 = GROUND;
+	right_calf.angle = -PI/4;
+
+	torso.x1 = WIDTH/2 - 1;
+	torso.y1 = 110;
+	torso.x2 = WIDTH/2 + 1;
+	torso.y2 = HEIGHT/2;
+	torso.angle = 0;
+}
+
+// Black screen and add ref point
+void InitScreen(void) {
+	DRAW_BG;
+	UpdateRefPos(); //Show reference point
+
+	DRAW_HEAD;
+	DRAW_TORSO;
+
+	UpdateAndDisplayBody();
+}
+
+// Display updated body
+void UpdateAndDisplayBody() {
+	// Resets previous positions to black
+	DrawLine(left_thigh.x1 , left_thigh.y1 , left_thigh.x2 , left_thigh.y2 , BLACK);
+	DrawLine(left_calf.x1  , left_calf.y1  , left_calf.x2  , left_calf.y2  , BLACK);
+	DrawLine(right_thigh.x1, right_thigh.y1, right_thigh.x2, right_thigh.y2, BLACK);
+	DrawLine(right_calf.x1 , right_calf.y1 , right_calf.x2 , right_calf.y2 , BLACK);
+
+	//Update leg array values
+	UpdateBody();
+
+	// Sets new positions to white
+	DrawLine(left_thigh.x1 , left_thigh.y1 , left_thigh.x2 , left_thigh.y2 , WHITE);
+	DrawLine(left_calf.x1  , left_calf.y1  , left_calf.x2  , left_calf.y2  , WHITE);
+	DrawLine(right_thigh.x1, right_thigh.y1, right_thigh.x2, right_thigh.y2, WHITE);
+	DrawLine(right_calf.x1 , right_calf.y1 , right_calf.x2 , right_calf.y2 , WHITE);
+}
+
+// Update leg array values
+void UpdateBody(void) {
+
+	// Use trig functions to calculate new values - based on input
+	left_thigh.x2 = WIDTH/2 + THIGH_LENGTH * sin(left_thigh.angle);
+	left_thigh.y2 = HEIGHT/2 + THIGH_LENGTH * cos(left_thigh.angle);
+	left_calf.x1 = left_thigh.x2;
+	left_calf.y1 = left_thigh.y2;
+	left_calf.x2 = left_thigh.x2 + CALF_LENGTH * sin(left_calf.angle);
+	left_calf.y2 = left_thigh.y2 + CALF_LENGTH * cos(left_calf.angle);
+
+	right_thigh.x2 = WIDTH/2 + THIGH_LENGTH * sin(right_thigh.angle);
+	right_thigh.y2 = HEIGHT/2 + THIGH_LENGTH * cos(right_thigh.angle);
+	right_calf.x1 = right_thigh.x2;
+	right_calf.y1 = right_thigh.y2;
+	right_calf.x2 = right_thigh.x2 + CALF_LENGTH * sin(right_calf.angle);
+	right_calf.y2 = right_thigh.y2 + CALF_LENGTH * cos(right_calf.angle);
+
+}
+
+void UpdateRefPos(void) {
+	DrawBar(oldRefPos-10, oldRefPos, 440, 460, BLACK); //clear existing
+	DrawBar(refPos-10, refPos, 440, 460, 0x0000FC00); //update point
+	oldRefPos = refPos;
 }
