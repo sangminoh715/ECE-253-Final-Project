@@ -1,7 +1,7 @@
 Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------
 | Tool Version              : Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-| Date                      : Mon Dec  3 15:22:21 2018
+| Date                      : Wed Dec  5 20:33:50 2018
 | Host                      : MY-LAPTOP running 64-bit major release  (build 9200)
 | Command                   : report_io -file system_wrapper_io_placed.rpt
 | Design                    : system_wrapper
@@ -25,7 +25,7 @@ Table of Contents
 +---------------+
 | Total User IO |
 +---------------+
-|            82 |
+|            83 |
 +---------------+
 
 
@@ -267,7 +267,7 @@ Table of Contents
 | N14        | led[3]        | High Range | IO_L8P_T1_D11_14             | OUTPUT      | LVCMOS33       |      14 |         12 | SLOW |                     |            FP_VTT_50 |         | FIXED      |           |          |          | NONE             |              |                   |              |
 | N15        |               | High Range | IO_L11P_T1_SRCC_14           | User IO     |                |      14 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
 | N16        |               | High Range | IO_L11N_T1_SRCC_14           | User IO     |                |      14 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
-| N17        |               | High Range | IO_L9P_T1_DQS_14             | User IO     |                |      14 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
+| N17        | btn[4]        | High Range | IO_L9P_T1_DQS_14             | INPUT       | LVCMOS33       |      14 |            |      |                     |                 NONE |         | FIXED      |           |          |          | NONE             |              |                   |              |
 | N18        |               |            | GND                          | GND         |                |         |            |      |                     |                      |     0.0 |            |           |          |          |                  |              |                   |              |
 | P1         |               |            | GND                          | GND         |                |         |            |      |                     |                      |     0.0 |            |           |          |          |                  |              |                   |              |
 | P2         | DDR2_ba[0]    | High Range | IO_L15P_T2_DQS_34            | OUTPUT      | SSTL18_II      |      34 |            | FAST |                     |  NP_VTT_50_FP_VTT_50 |         | FIXED      |           |          |          | NONE             |              |                   |              |

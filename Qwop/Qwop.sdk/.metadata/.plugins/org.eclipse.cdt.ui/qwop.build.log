@@ -1,21 +1,6 @@
-16:45:26 **** Auto Build of configuration Debug for project qwop ****
+20:48:13 **** Incremental Build of configuration Debug for project qwop ****
 make all 
-'Building file: ../src/test_TFT.c'
-'Invoking: MicroBlaze gcc compiler'
-mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/test_TFT.o" -I../../qwop_bsp/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/test_TFT.d" -MT"src/test_TFT.o" -o "src/test_TFT.o" "../src/test_TFT.c"
-'Finished building: ../src/test_TFT.c'
-' '
-'Building target: qwop.elf'
-'Invoking: MicroBlaze gcc linker'
-mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../qwop_bsp/microblaze_0/lib -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "qwop.elf"  ./src/platform.o ./src/test_TFT.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
-'Finished building target: qwop.elf'
-' '
-'Invoking: MicroBlaze Print Size'
-mb-size qwop.elf  |tee "qwop.elf.size"
-   text	   data	    bss	    dec	    hex	filename
-   5066	    404	   2138	   7608	   1db8	qwop.elf
-'Finished building: qwop.elf.size'
-' '
+make: Nothing to be done for `all'.
 
-16:45:27 Build Finished (took 743ms)
+20:48:13 Build Finished (took 207ms)
 

@@ -1,5 +1,6 @@
 -makelib ies_lib/xil_defaultlib -sv \
   "D:/Xilinx/Vivado/2017.4/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv" \
+  "D:/Xilinx/Vivado/2017.4/data/ip/xpm/xpm_fifo/hdl/xpm_fifo.sv" \
   "D:/Xilinx/Vivado/2017.4/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv" \
 -endlib
 -makelib ies_lib/xpm \
@@ -108,102 +109,141 @@
   "../../../bd/system/ip/system_mig_7series_0_0/system_mig_7series_0_0/user_design/rtl/system_mig_7series_0_0.v" \
 -endlib
 -makelib ies_lib/microblaze_v10_0_5 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/4f30/hdl/microblaze_v10_0_vh_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/4f30/hdl/microblaze_v10_0_vh_rfs.vhd" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_microblaze_0_0/sim/system_microblaze_0_0.vhd" \
 -endlib
 -makelib ies_lib/axi_lite_ipif_v3_0_4 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/cced/hdl/axi_lite_ipif_v3_0_vh_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/cced/hdl/axi_lite_ipif_v3_0_vh_rfs.vhd" \
 -endlib
 -makelib ies_lib/axi_intc_v4_1_10 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/cf04/hdl/axi_intc_v4_1_vh_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/cf04/hdl/axi_intc_v4_1_vh_rfs.vhd" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_microblaze_0_axi_intc_0/sim/system_microblaze_0_axi_intc_0.vhd" \
 -endlib
 -makelib ies_lib/xlconcat_v2_1_1 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/2f66/hdl/xlconcat_v2_1_vl_rfs.v" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/2f66/hdl/xlconcat_v2_1_vl_rfs.v" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_microblaze_0_xlconcat_0/sim/system_microblaze_0_xlconcat_0.v" \
 -endlib
 -makelib ies_lib/mdm_v3_2_12 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/8608/hdl/mdm_v3_2_vh_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/8608/hdl/mdm_v3_2_vh_rfs.vhd" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_mdm_1_0/sim/system_mdm_1_0.vhd" \
 -endlib
 -makelib ies_lib/lib_cdc_v1_0_2 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/ef1e/hdl/lib_cdc_v1_0_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/ef1e/hdl/lib_cdc_v1_0_rfs.vhd" \
 -endlib
 -makelib ies_lib/proc_sys_reset_v5_0_12 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/f86a/hdl/proc_sys_reset_v5_0_vh_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/f86a/hdl/proc_sys_reset_v5_0_vh_rfs.vhd" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_rst_mig_7series_0_100M_0/sim/system_rst_mig_7series_0_100M_0.vhd" \
 -endlib
 -makelib ies_lib/lib_pkg_v1_0_2 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/0513/hdl/lib_pkg_v1_0_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/0513/hdl/lib_pkg_v1_0_rfs.vhd" \
 -endlib
 -makelib ies_lib/axi_timer_v2_0_17 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/38c3/hdl/axi_timer_v2_0_vh_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/38c3/hdl/axi_timer_v2_0_vh_rfs.vhd" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_axi_timer_0_0/sim/system_axi_timer_0_0.vhd" \
 -endlib
+-makelib ies_lib/interrupt_control_v3_1_4 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/8e66/hdl/interrupt_control_v3_1_vh_rfs.vhd" \
+-endlib
+-makelib ies_lib/axi_gpio_v2_0_17 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/c450/hdl/axi_gpio_v2_0_vh_rfs.vhd" \
+-endlib
+-makelib ies_lib/xil_defaultlib \
+  "../../../bd/system/ip/system_axi_gpio_0_0/sim/system_axi_gpio_0_0.vhd" \
+  "../../../bd/system/ip/system_axi_gpio_0_2/sim/system_axi_gpio_0_2.vhd" \
+-endlib
+-makelib ies_lib/xil_defaultlib \
+  "../../../bd/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0_clk_wiz.v" \
+  "../../../bd/system/ip/system_clk_wiz_0_0/system_clk_wiz_0_0.v" \
+-endlib
+-makelib ies_lib/fifo_generator_v13_2_1 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/5c35/simulation/fifo_generator_vlog_beh.v" \
+-endlib
+-makelib ies_lib/fifo_generator_v13_2_1 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/5c35/hdl/fifo_generator_v13_2_rfs.vhd" \
+-endlib
+-makelib ies_lib/fifo_generator_v13_2_1 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/5c35/hdl/fifo_generator_v13_2_rfs.v" \
+-endlib
+-makelib ies_lib/lib_fifo_v1_0_10 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/f10a/hdl/lib_fifo_v1_0_rfs.vhd" \
+-endlib
+-makelib ies_lib/lib_srl_fifo_v1_0_2 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/51ce/hdl/lib_srl_fifo_v1_0_rfs.vhd" \
+-endlib
+-makelib ies_lib/axi_master_burst_v2_0_7 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/ce12/hdl/axi_master_burst_v2_0_vh_rfs.vhd" \
+-endlib
+-makelib ies_lib/axi_tft_v2_0_19 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/cc30/hdl/axi_tft_v2_0_rfs.v" \
+-endlib
+-makelib ies_lib/axi_tft_v2_0_19 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/cc30/hdl/axi_tft_v2_0_rfs.vhd" \
+-endlib
+-makelib ies_lib/xil_defaultlib \
+  "../../../bd/system/ip/system_axi_tft_0_0/sim/system_axi_tft_0_0.vhd" \
+-endlib
 -makelib ies_lib/generic_baseblocks_v2_1_0 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/b752/hdl/generic_baseblocks_v2_1_vl_rfs.v" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/b752/hdl/generic_baseblocks_v2_1_vl_rfs.v" \
 -endlib
 -makelib ies_lib/axi_infrastructure_v1_1_0 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/ec67/hdl/axi_infrastructure_v1_1_vl_rfs.v" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/ec67/hdl/axi_infrastructure_v1_1_vl_rfs.v" \
 -endlib
 -makelib ies_lib/axi_register_slice_v2_1_15 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/3ed1/hdl/axi_register_slice_v2_1_vl_rfs.v" \
--endlib
--makelib ies_lib/fifo_generator_v13_2_1 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/5c35/simulation/fifo_generator_vlog_beh.v" \
--endlib
--makelib ies_lib/fifo_generator_v13_2_1 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/5c35/hdl/fifo_generator_v13_2_rfs.vhd" \
--endlib
--makelib ies_lib/fifo_generator_v13_2_1 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/5c35/hdl/fifo_generator_v13_2_rfs.v" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/3ed1/hdl/axi_register_slice_v2_1_vl_rfs.v" \
 -endlib
 -makelib ies_lib/axi_data_fifo_v2_1_14 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/9909/hdl/axi_data_fifo_v2_1_vl_rfs.v" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/9909/hdl/axi_data_fifo_v2_1_vl_rfs.v" \
 -endlib
 -makelib ies_lib/axi_crossbar_v2_1_16 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/c631/hdl/axi_crossbar_v2_1_vl_rfs.v" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/c631/hdl/axi_crossbar_v2_1_vl_rfs.v" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_xbar_0/sim/system_xbar_0.v" \
 -endlib
--makelib ies_lib/axi_protocol_converter_v2_1_15 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/ff69/hdl/axi_protocol_converter_v2_1_vl_rfs.v" \
--endlib
--makelib ies_lib/xil_defaultlib \
-  "../../../bd/system/ip/system_auto_pc_0/sim/system_auto_pc_0.v" \
--endlib
 -makelib ies_lib/lmb_v10_v3_0_9 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/78eb/hdl/lmb_v10_v3_0_vh_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/78eb/hdl/lmb_v10_v3_0_vh_rfs.vhd" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_dlmb_v10_0/sim/system_dlmb_v10_0.vhd" \
   "../../../bd/system/ip/system_ilmb_v10_0/sim/system_ilmb_v10_0.vhd" \
 -endlib
 -makelib ies_lib/lmb_bram_if_cntlr_v4_0_14 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/226d/hdl/lmb_bram_if_cntlr_v4_0_vh_rfs.vhd" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/226d/hdl/lmb_bram_if_cntlr_v4_0_vh_rfs.vhd" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_dlmb_bram_if_cntlr_0/sim/system_dlmb_bram_if_cntlr_0.vhd" \
   "../../../bd/system/ip/system_ilmb_bram_if_cntlr_0/sim/system_ilmb_bram_if_cntlr_0.vhd" \
 -endlib
 -makelib ies_lib/blk_mem_gen_v8_4_1 \
-  "../../../../ECE 253 Final Project.srcs/sources_1/bd/system/ipshared/67d8/simulation/blk_mem_gen_v8_4.v" \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/67d8/simulation/blk_mem_gen_v8_4.v" \
 -endlib
 -makelib ies_lib/xil_defaultlib \
   "../../../bd/system/ip/system_lmb_bram_0/sim/system_lmb_bram_0.v" \
+-endlib
+-makelib ies_lib/axi_protocol_converter_v2_1_15 \
+  "../../../../Qwop.srcs/sources_1/bd/system/ipshared/ff69/hdl/axi_protocol_converter_v2_1_vl_rfs.v" \
+-endlib
+-makelib ies_lib/xil_defaultlib \
+  "../../../bd/system/ip/system_auto_pc_5/sim/system_auto_pc_5.v" \
+  "../../../bd/system/ip/system_auto_pc_4/sim/system_auto_pc_4.v" \
+  "../../../bd/system/ip/system_auto_pc_3/sim/system_auto_pc_3.v" \
+  "../../../bd/system/ip/system_auto_pc_2/sim/system_auto_pc_2.v" \
+  "../../../bd/system/ip/system_auto_pc_1/sim/system_auto_pc_1.v" \
+  "../../../bd/system/ip/system_auto_pc_0/sim/system_auto_pc_0.v" \
+  "../../../bd/system/ip/system_auto_pc_7/sim/system_auto_pc_7.v" \
+  "../../../bd/system/ip/system_auto_pc_6/sim/system_auto_pc_6.v" \
   "../../../bd/system/sim/system.v" \
 -endlib
 -makelib ies_lib/xil_defaultlib \

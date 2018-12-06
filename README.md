@@ -5,6 +5,7 @@
 * Aditya Wadaskar
 
 ## Useful Links
+* [The Actual Game (For Reference)](http://www.foddy.net/Athletics.html)
 * [VGA Basics](http://www.brackeen.com/vga/basics.html)
 * [Xilinx Hardware Setup](https://www.xilinx.com/support/documentation/application_notes/xapp1162.pdf)
 * [Xilinx FPGA Tutorial that involves VGA](https://fenix.tecnico.ulisboa.pt/downloadFile/845043405442805/EC_tutorialB%20-%20Camera%20and%20VGA%20-%2018set15.pdf)
