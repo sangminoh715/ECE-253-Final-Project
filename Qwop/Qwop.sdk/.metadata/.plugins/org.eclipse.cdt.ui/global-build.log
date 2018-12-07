@@ -1,4 +1,19 @@
-20:42:33 **** Build of project qwop_bsp ****
+23:50:15 **** Clean-only build of configuration Debug for project qwop ****
+make clean 
+rm -rf  ./src/qwop.o  ./src/qwop.d  qwop.elf.size  qwop.elf
+' '
+23:50:15 **** Clean-only build of project qwop_bsp ****
+make -k clean 
+make -C microblaze_0/libsrc/bram_v4_2/src -s clean 
+make -C microblaze_0/libsrc/cpu_v2_6/src -s clean 
+make -C microblaze_0/libsrc/gpio_v4_3/src -s clean 
+make -C microblaze_0/libsrc/intc_v3_7/src -s clean 
+make -C microblaze_0/libsrc/standalone_v6_5/src -s clean 
+make -C microblaze_0/libsrc/tft_v6_1/src -s clean 
+make -C microblaze_0/libsrc/tmrctr_v4_4/src -s clean 
+make -C microblaze_0/libsrc/uartlite_v3_2/src -s clean 
+rm -f microblaze_0/lib/libxil.a
+23:50:17 **** Build of project qwop_bsp ****
 make -k all 
 "Running Make include in microblaze_0/libsrc/bram_v4_2/src"
 make -C microblaze_0/libsrc/bram_v4_2/src -s include  "SHELL=CMD" "COMPILER=mb-gcc" "ARCHIVER=mb-ar" "COMPILER_FLAGS= -O2 -c -mcpu=v10.0 -mlittle-endian -mno-xl-soft-mul -mxl-barrel-shift -mxl-pattern-compare" "EXTRA_COMPILER_FLAGS=-ffunction-sections -fdata-sections -Wall -Wextra"
@@ -42,22 +57,7 @@ make -C microblaze_0/libsrc/tmrctr_v4_4/src -s libs  "SHELL=CMD" "COMPILER=mb-gc
 make -C microblaze_0/libsrc/uartlite_v3_2/src -s libs  "SHELL=CMD" "COMPILER=mb-gcc" "ARCHIVER=mb-ar" "COMPILER_FLAGS= -O2 -c -mcpu=v10.0 -mlittle-endian -mno-xl-soft-mul -mxl-barrel-shift -mxl-pattern-compare" "EXTRA_COMPILER_FLAGS=-ffunction-sections -fdata-sections -Wall -Wextra"
 "Compiling uartlite"
 'Finished building libraries'
-
-**** Build of configuration Debug for project qwop ****
-
-Nothing to build for project qwop
-20:43:28 **** Auto Build of configuration Debug for project qwop ****
-make all 
-'Building file: ../src/qwop.c'
-'Invoking: MicroBlaze gcc compiler'
-mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/qwop.o" -I../../qwop_bsp/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/qwop.d" -MT"src/qwop.o" -o "src/qwop.o" "../src/qwop.c"
-../src/qwop.c: In function 'main':
-../src/qwop.c:122:25: error: 'XPAR_GPIO_3_DEVICE_ID' undeclared (first use in this function)
-  XGpio_Initialize(&btn, XPAR_GPIO_3_DEVICE_ID);
-                         ^~~~~~~~~~~~~~~~~~~~~
-../src/qwop.c:122:25: note: each undeclared identifier is reported only once for each function it appears in
-make: *** [src/qwop.o] Error 1
-20:47:17 **** Auto Build of configuration Debug for project qwop ****
+23:50:38 **** Build of configuration Debug for project qwop ****
 make all 
 'Building file: ../src/qwop.c'
 'Invoking: MicroBlaze gcc compiler'
@@ -72,34 +72,9 @@ mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../qwop_bsp/microblaze_0/lib -mlittle-e
 'Invoking: MicroBlaze Print Size'
 mb-size qwop.elf  |tee "qwop.elf.size"
    text	   data	    bss	    dec	    hex	filename
-  33280	    464	   3520	  37264	   9190	qwop.elf
+  42680	    472	   2472	  45624	   b238	qwop.elf
 'Finished building: qwop.elf.size'
 ' '
-20:47:20 **** Auto Build of configuration Debug for project qwop ****
-make all 
-make: Nothing to be done for `all'.
-20:47:32 **** Clean-only build of configuration Debug for project qwop ****
-make clean 
-rm -rf  ./src/qwop.o  ./src/qwop.d  qwop.elf.size  qwop.elf
-' '
-20:47:32 **** Auto Build of configuration Debug for project qwop ****
-make all 
-'Building file: ../src/qwop.c'
-'Invoking: MicroBlaze gcc compiler'
-mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/qwop.o" -I../../qwop_bsp/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/qwop.d" -MT"src/qwop.o" -o "src/qwop.o" "../src/qwop.c"
-'Finished building: ../src/qwop.c'
-' '
-'Building target: qwop.elf'
-'Invoking: MicroBlaze gcc linker'
-mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../qwop_bsp/microblaze_0/lib -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0 -mno-xl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "qwop.elf"  ./src/qwop.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
-'Finished building target: qwop.elf'
-' '
-'Invoking: MicroBlaze Print Size'
-mb-size qwop.elf  |tee "qwop.elf.size"
-   text	   data	    bss	    dec	    hex	filename
-  33280	    464	   2496	  36240	   8d90	qwop.elf
-'Finished building: qwop.elf.size'
-' '
-20:48:13 **** Incremental Build of configuration Debug for project qwop ****
+23:51:40 **** Incremental Build of configuration Debug for project qwop ****
 make all 
 make: Nothing to be done for `all'.

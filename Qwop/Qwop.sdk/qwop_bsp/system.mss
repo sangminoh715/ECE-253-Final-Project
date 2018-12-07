@@ -6,6 +6,7 @@ BEGIN OS
  PARAMETER OS_NAME = standalone
  PARAMETER OS_VER = 6.5
  PARAMETER PROC_INSTANCE = microblaze_0
+ PARAMETER profile_timer = axi_timer_0
  PARAMETER stdin = mdm_1
  PARAMETER stdout = mdm_1
 END
