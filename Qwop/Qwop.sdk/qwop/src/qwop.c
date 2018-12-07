@@ -38,7 +38,8 @@
 #define PI				3.141592653
 #define MAX_THIGH_ANGLE	5*PI/8
 
-#define sgn(x) ((x<0)?-1:((x>0)?1:0)) // return sign of a number
+#define sgn(x) ((x<0)?-1:((x>0)?1:0))	// Return Sign of a Number
+#define max(x, y) ((x > y) ? x : y)		// Return Maximum Value
 
 static XGpio led;
 static XGpio btn;
@@ -385,20 +386,28 @@ void UpdateBody(void) {
 
 	leftInFront = (left_calf.x2 > right_calf.x2) ? 1 : 0;
 
-	if(!(controls[3] | controls[2] | controls[1] | controls[0])) {
-		// Case I - Front Leg is Not Touching the Ground
-		if(((leftInFront && left_calf.y2 < GROUND-1) || (!leftInFront && right_calf.y2 < GROUND-2)) && left_calf.y1 < GROUND-1 && right_calf.y1 < GROUND-1) {
-			left_thigh.angle -= DELTA_THETA;
-			left_calf.angle -= DELTA_THETA;
-			right_thigh.angle -= DELTA_THETA;
-			right_calf.angle -= DELTA_THETA;
+	if((controls[3] | controls[2] | controls[1] | controls[0]) == 0) {
+		int delta_h;
+		// Case I - One foot/knee is off of the ground
+		if(left_calf.y1 < GROUND-1 || left_calf.y2 < GROUND-1 || right_calf.y1 < GROUND-1 || right_calf.y2 < GROUND-1) {
+			if((leftInFront && left_calf.y2 < GROUND-1) || (!leftInFront && right_calf.y2 < GROUND-1)) {
+				left_thigh.angle -= DELTA_THETA;
+				left_calf.angle -= DELTA_THETA;
+				right_thigh.angle -= DELTA_THETA;
+				right_calf.angle -= DELTA_THETA;
+			} else if((leftInFront && right_calf.y2 < GROUND-1) || (!leftInFront && left_calf.y2 < GROUND-1)) {
+				left_thigh.angle += DELTA_THETA;
+				left_calf.angle += DELTA_THETA;
+				right_thigh.angle += DELTA_THETA;
+				right_calf.angle += DELTA_THETA;
+			}
 
 			right_calf.x1 = right_thigh.x2 = right_thigh.x1 + THIGH_LENGTH * sin(right_thigh.angle);
 			right_calf.y1 = right_thigh.y2 = right_thigh.y1 + THIGH_LENGTH * cos(right_thigh.angle);
 			right_calf.x2 = right_thigh.x2 + CALF_LENGTH * sin(right_calf.angle);
 			right_calf.y2 = right_thigh.y2 + CALF_LENGTH * cos(right_calf.angle);
 
-			int delta_h = GROUND - ((leftInFront) ? right_calf.y2 : left_calf.y2);
+			delta_h = GROUND - max(max(max(left_calf.y1, left_calf.y2), right_calf.y1), right_calf.y2);
 
 			torso.y1 += delta_h;
 			torso.y2 += delta_h;
