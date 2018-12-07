@@ -62,6 +62,7 @@ struct part torso;
 
 int refPos = WIDTH, oldRefPos = WIDTH;
 
+int counter = 0;
 u16 leds = 0x0000;
 int controls[5] = {0,	// Q = Right Thigh
                    0, 	// W = Left Thigh
@@ -157,8 +158,9 @@ int main() {
 
 	while(1) {
 		DRAW_GROUND;
-		UpdateAndDisplayBody();
-		//sleep(1);
+
+		if(counter % 20 == 0)
+			UpdateAndDisplayBody();
 	}
 
 	Xil_DCacheDisable();
@@ -172,6 +174,7 @@ void TimerInterruptHandler(void) {
 	int i;
 	u32 ControlStatusReg;
 	ControlStatusReg = XTimerCtr_ReadReg(timer.BaseAddress, 0, XTC_TCSR_OFFSET);
+	++counter;
 
 	// Read the inputs
 	u32 inputs = XGpio_DiscreteRead(&btn, GPIO_CHANNEL);
@@ -386,21 +389,14 @@ void UpdateBody(void) {
 
 	leftInFront = (left_calf.x2 > right_calf.x2) ? 1 : 0;
 
-	if((controls[3] | controls[2] | controls[1] | controls[0]) == 0) {
+	//if((controls[3] | controls[2] | controls[1] | controls[0]) == 0) {
 		int delta_h;
-		// Case I - One foot/knee is off of the ground
-		if(left_calf.y1 < GROUND-1 || left_calf.y2 < GROUND-1 || right_calf.y1 < GROUND-1 || right_calf.y2 < GROUND-1) {
-			if((leftInFront && left_calf.y2 < GROUND-1) || (!leftInFront && right_calf.y2 < GROUND-1)) {
-				left_thigh.angle -= DELTA_THETA;
-				left_calf.angle -= DELTA_THETA;
-				right_thigh.angle -= DELTA_THETA;
-				right_calf.angle -= DELTA_THETA;
-			} else if((leftInFront && right_calf.y2 < GROUND-1) || (!leftInFront && left_calf.y2 < GROUND-1)) {
-				left_thigh.angle += DELTA_THETA;
-				left_calf.angle += DELTA_THETA;
-				right_thigh.angle += DELTA_THETA;
-				right_calf.angle += DELTA_THETA;
-			}
+		// Case I - Both legs are in front of the center of gravity
+		if(left_calf.x2 > WIDTH/2 && right_calf.x2 > WIDTH/2 && torso.y2 < GROUND-1) {\
+			if(left_thigh.angle < 3*PI/4)	left_thigh.angle += 4*DELTA_THETA;
+			if(left_calf.angle < 3*PI/5)	left_calf.angle += 4*DELTA_THETA;
+			if(right_thigh.angle < 3*PI/4)	right_thigh.angle += 4*DELTA_THETA;
+			if(right_calf.angle < 3*PI/5)	right_calf.angle += 4*DELTA_THETA;
 
 			right_calf.x1 = right_thigh.x2 = right_thigh.x1 + THIGH_LENGTH * sin(right_thigh.angle);
 			right_calf.y1 = right_thigh.y2 = right_thigh.y1 + THIGH_LENGTH * cos(right_thigh.angle);
@@ -420,6 +416,38 @@ void UpdateBody(void) {
 			right_calf.y1 += delta_h;
 			right_calf.y2 += delta_h;
 		}
+		// Case II - One foot/knee is off of the ground
+		else if((left_calf.y1 < GROUND-1 || left_calf.y2 < GROUND-1 || right_calf.y1 < GROUND-1 || right_calf.y2 < GROUND-1) && torso.y2 < GROUND-1) {
+			if((leftInFront && left_calf.x2 > WIDTH/2 && left_calf.y2 < GROUND-1) || (!leftInFront && right_calf.x2 > WIDTH/2 && right_calf.y2 < GROUND-1)) {
+				if((leftInFront && left_thigh.angle > 0) || (!leftInFront && left_thigh.angle > -PI/2))	left_thigh.angle -= 4*DELTA_THETA;
+				if((leftInFront && left_calf.angle > -PI/9) || (!leftInFront && left_calf.angle > -5*PI/9))	left_calf.angle -= 4*DELTA_THETA;
+				if((leftInFront && right_thigh.angle > -PI/2) || (!leftInFront && right_thigh.angle > 0))	right_thigh.angle -= 4*DELTA_THETA;
+				if((leftInFront && right_calf.angle > -5*PI/9) || (!leftInFront && right_calf.angle > -PI/9))	right_calf.angle -= 4*DELTA_THETA;
+			} else if((leftInFront && right_calf.x2 < WIDTH/2 && right_calf.y2 < GROUND-1) || (!leftInFront && left_calf.x2 < WIDTH/2 && left_calf.y2 < GROUND-1)) {
+				if((leftInFront && left_thigh.angle < 5*PI/9) || (!leftInFront && left_thigh.angle < 0))	left_thigh.angle += 4*DELTA_THETA;
+				if((leftInFront && left_calf.angle < PI/2) || (!leftInFront && left_calf.angle < -PI/9))		left_calf.angle += 4*DELTA_THETA;
+				if((leftInFront && right_thigh.angle < 0) || (!leftInFront && right_thigh.angle < PI/2))	right_thigh.angle += 4*DELTA_THETA;
+				if((leftInFront && right_calf.angle < -PI/9) || (!leftInFront && right_calf.angle < 5*PI/9))		right_calf.angle += 4*DELTA_THETA;
+			}
+
+			right_calf.x1 = right_thigh.x2 = right_thigh.x1 + THIGH_LENGTH * sin(right_thigh.angle);
+			right_calf.y1 = right_thigh.y2 = right_thigh.y1 + THIGH_LENGTH * cos(right_thigh.angle);
+			right_calf.x2 = right_thigh.x2 + CALF_LENGTH * sin(right_calf.angle);
+			right_calf.y2 = right_thigh.y2 + CALF_LENGTH * cos(right_calf.angle);
+
+			delta_h = GROUND - max(max(max(left_calf.y1, left_calf.y2), right_calf.y1), right_calf.y2);
+
+			torso.y1 += delta_h;
+			torso.y2 += delta_h;
+			left_thigh.y1 += delta_h;
+			left_thigh.y2 += delta_h;
+			left_calf.y1 += delta_h;
+			left_calf.y2 += delta_h;
+			right_thigh.y1 += delta_h;
+			right_thigh.y2 += delta_h;
+			right_calf.y1 += delta_h;
+			right_calf.y2 += delta_h;
+		//}
 	}
 }
 
