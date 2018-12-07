@@ -416,7 +416,32 @@ void UpdateBody(void) {
 			right_calf.y1 += delta_h;
 			right_calf.y2 += delta_h;
 		}
-		// Case II - One foot/knee is off of the ground
+		// Case II - Both legs are behind the center of gravity
+		else if(left_calf.x1 < WIDTH/2 && right_calf.x1 < WIDTH/2 && torso.y2 < GROUND-1) {
+			if(left_thigh.angle > -PI/2)	left_thigh.angle -= 4*DELTA_THETA;
+			if(left_calf.angle > -3*PI/5)	left_calf.angle -= 4*DELTA_THETA;
+			if(right_thigh.angle > -PI/2)	right_thigh.angle -= 4*DELTA_THETA;
+			if(right_calf.angle > -3*PI/5)	right_calf.angle -= 4*DELTA_THETA;
+
+			right_calf.x1 = right_thigh.x2 = right_thigh.x1 + THIGH_LENGTH * sin(right_thigh.angle);
+			right_calf.y1 = right_thigh.y2 = right_thigh.y1 + THIGH_LENGTH * cos(right_thigh.angle);
+			right_calf.x2 = right_thigh.x2 + CALF_LENGTH * sin(right_calf.angle);
+			right_calf.y2 = right_thigh.y2 + CALF_LENGTH * cos(right_calf.angle);
+
+			delta_h = GROUND - max(max(max(left_calf.y1, left_calf.y2), right_calf.y1), right_calf.y2);
+
+			torso.y1 += delta_h;
+			torso.y2 += delta_h;
+			left_thigh.y1 += delta_h;
+			left_thigh.y2 += delta_h;
+			left_calf.y1 += delta_h;
+			left_calf.y2 += delta_h;
+			right_thigh.y1 += delta_h;
+			right_thigh.y2 += delta_h;
+			right_calf.y1 += delta_h;
+			right_calf.y2 += delta_h;
+		}
+		// Case III - One foot/knee is off of the ground
 		else if((left_calf.y1 < GROUND-1 || left_calf.y2 < GROUND-1 || right_calf.y1 < GROUND-1 || right_calf.y2 < GROUND-1) && torso.y2 < GROUND-1) {
 			if((leftInFront && left_calf.x2 > WIDTH/2 && left_calf.y2 < GROUND-1) || (!leftInFront && right_calf.x2 > WIDTH/2 && right_calf.y2 < GROUND-1)) {
 				if((leftInFront && left_thigh.angle > 0) || (!leftInFront && left_thigh.angle > -PI/2))	left_thigh.angle -= 4*DELTA_THETA;
