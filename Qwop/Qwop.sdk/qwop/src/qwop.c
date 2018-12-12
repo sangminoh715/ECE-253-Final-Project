@@ -47,7 +47,10 @@
 #define DRAW_BG			DrawBar(0, WIDTH, 0, HEIGHT, BLACK)
 #define DRAW_GROUND		DrawLine(0, GROUND, WIDTH, GROUND, WHITE)
 #define DRAW_UPPER_BODY(color)	{\
-	DrawCircle(WIDTH/2, torso.y1 - 50, 50, color);\
+	DrawCircle(WIDTH/2, torso.y1 - 50, 50, color, 1);\
+	DrawLine(torso.x1-17, torso.y1-75, torso.x1-17, torso.y1-50, color);\
+	DrawLine(torso.x1+17, torso.y1-75, torso.x1+17, torso.y1-50, color);\
+	DrawCircle(WIDTH/2, torso.y1 - 50, 35, color, 0);\
 	\
 	DrawLine(torso.x1, torso.y1, torso.x2, torso.y2, color);\
 	\
@@ -149,8 +152,9 @@ u8 timerText[7] = {0x54, 0x49, 0x4D, 0x45, 0x52, 0x20, 0x3A};
 void TimerInterruptHandler(void);
 
 // Drawing Functions
+void DisplayTimer(int time);
 void DrawBar(int x0, int x1, int y0, int y1, u32 color);
-void DrawCircle(int x0, int y0, int radius, u32 color);
+void DrawCircle(int x0, int y0, int radius, u32 color, int full);
 void DrawLine(int x1, int y1, int x2, int y2, u32 color);
 void InitializeParameters(void);
 void InitScreen(void);
@@ -253,6 +257,7 @@ void TimerInterruptHandler(void) {
 		if((++timectr) % SECOND == 0)
 			--time;
 		if(time <= 0) {
+			DisplayTimer(time);
 			gameOver = 1;
 			WRITE_GAME_OVER_SIDE;
 		}
@@ -287,28 +292,36 @@ void TimerInterruptHandler(void) {
 			if(controls[i]) {
 				switch(i) {
 				case 0: // Q is pressed
+					if(controls[1] || controls[2] || controls[3]) break;
+
 					if(right_thigh.angle > -MAX_THIGH_ANGLE && right_thigh.angle < MAX_THIGH_ANGLE && right_thigh.y2 < GROUND-1) {
 						right_thigh.angle += DELTA_THETA;
 
 						int y_prime = right_thigh.y1 + THIGH_LENGTH * cos(right_thigh.angle);
 						right_calf.angle = ((right_calf.angle > 0) ? 1 : -1) * acos(((double) min(GROUND - y_prime, CALF_LENGTH)) / CALF_LENGTH);
 					} else {
-						right_thigh.angle += DELTA_THETA;
-						right_calf.angle += DELTA_THETA;
+						if(right_thigh.angle > -MAX_THIGH_ANGLE && right_thigh.angle < MAX_THIGH_ANGLE) {
+							right_thigh.angle += DELTA_THETA;
+							right_calf.angle += DELTA_THETA;
+						}
 					}
 					break;
 				case 1: // W is pressed
+					if(controls[0] || controls[2] || controls[3]) break;
 					if(left_thigh.angle > -MAX_THIGH_ANGLE && left_thigh.angle < MAX_THIGH_ANGLE && left_thigh.y2 < GROUND-1) {
 						left_thigh.angle += DELTA_THETA;
 
 						int y_prime = left_thigh.y1 + THIGH_LENGTH * cos(left_thigh.angle);
 						left_calf.angle = ((left_calf.angle > 0) ? 1 : -1) * acos(((double) min(GROUND - y_prime, CALF_LENGTH)) / CALF_LENGTH);
 					} else {
-						left_thigh.angle += DELTA_THETA;
-						left_calf.angle += DELTA_THETA;
+						if(left_thigh.angle > -MAX_THIGH_ANGLE && left_thigh.angle < MAX_THIGH_ANGLE) {
+							left_thigh.angle += DELTA_THETA;
+							left_calf.angle += DELTA_THETA;
+						}
 					}
 					break;
 				case 2: // O is pressed
+					if(controls[0] || controls[1] || controls[3]) break;
 					if(left_calf.angle > (left_thigh.angle - 7 * PI / 8) && left_calf.angle < (left_thigh.angle)) {
 						if(left_calf.x1 >= torso.x2 && left_calf.y1 < GROUND-1) {
 							left_thigh.angle += ((left_calf.angle > 0) ? 1 : -1) * DELTA_THETA;
@@ -316,16 +329,15 @@ void TimerInterruptHandler(void) {
 							int y_prime = left_thigh.y1 + THIGH_LENGTH * cos(left_thigh.angle);
 							left_calf.angle = ((left_calf.angle > 0) ? 1 : -1) * acos(((double) min(GROUND - y_prime, CALF_LENGTH)) / CALF_LENGTH);
 
-							if (!controls[1]) {
-								score += 1;
-								refPos -= 1;
-							}
+							score += 1;
+							refPos -= 1;
 						} else {
 							left_calf.angle -= DELTA_THETA;
 						}
 					}
 					break;
 				case 3: // P is pressed
+					if(controls[0] || controls[1] || controls[2]) break;
 					if(right_calf.angle > (right_thigh.angle - 7 * PI / 8) && right_calf.angle < (right_thigh.angle)) {
 						if(right_calf.x1 >= torso.x2 && right_calf.y1 < GROUND-1) {
 							right_thigh.angle += ((right_calf.angle > 0) ? 1 : -1) * DELTA_THETA;
@@ -333,10 +345,8 @@ void TimerInterruptHandler(void) {
 							int y_prime = right_thigh.y1 + THIGH_LENGTH * cos(right_thigh.angle);
 							right_calf.angle = ((right_calf.angle > 0) ? 1 : -1) * acos(((double) min(GROUND - y_prime, CALF_LENGTH)) / CALF_LENGTH);
 
-							if (!controls[0]) {
-								score += 1;
-								refPos -= 1;
-							}
+							score += 1;
+							refPos -= 1;
 						} else {
 							right_calf.angle -= DELTA_THETA;
 						}
@@ -374,20 +384,23 @@ void DrawBar(int x0, int x1, int y0, int y1, u32 color) {
 }
 
 // Draw circle using Bresenham's algorithm
-void DrawCircle(int x0, int y0, int radius, u32 color) {
+void DrawCircle(int x0, int y0, int radius, u32 color, int full) {
 	if(resetPressed) return;
 
     int x = radius-1, y = 0, dx = 1, dy = 1, err = dx - (radius << 1);
 
     while (x >= y) {
-    	Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 + y) + 4*(x0 + x), color);
-		Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 + x) + 4*(x0 + y), color);
-		Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 + x) + 4*(x0 - y), color);
-		Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 + y) + 4*(x0 - x), color);
-		Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 - y) + 4*(x0 - x), color);
-		Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 - x) + 4*(x0 - y), color);
-		Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 - x) + 4*(x0 + y), color);
-		Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 - y) + 4*(x0 + x), color);
+    	if(full) {
+    		Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 + y) + 4*(x0 + x), color);
+
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 + y) + 4*(x0 - x), color);
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 - y) + 4*(x0 - x), color);
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 - x) + 4*(x0 - y), color);
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 - x) + 4*(x0 + y), color);
+			Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 - y) + 4*(x0 + x), color);
+    	}
+    	Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 + x) + 4*(x0 + y), color);
+    	Xil_Out32(FRAME_BUFFER_0_ADDR + 4096*(y0 + x) + 4*(x0 - y), color);
 
         if (err <= 0) {
             y++;
@@ -493,6 +506,8 @@ void InitScreen(void) {
 
 // Display updated body
 void UpdateAndDisplayBody() {
+	if(gameOver) return;
+
 	// Display the timer
 	DisplayTimer(time);
 
