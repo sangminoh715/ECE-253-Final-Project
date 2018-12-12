@@ -40,6 +40,7 @@
 
 #define sgn(x) ((x<0)?-1:((x>0)?1:0))	// Return Sign of a Number
 #define max(x, y) ((x > y) ? x : y)		// Return Maximum Value
+#define min(x, y) ((x < y) ? x : y)		// Return Minimum Value
 
 static XGpio led;
 static XGpio btn;
@@ -196,24 +197,42 @@ void TimerInterruptHandler(void) {
 			if(controls[i]) {
 				switch(i) {
 				case 0: // Q is pressed
-					if(right_thigh.angle > -MAX_THIGH_ANGLE && right_thigh.angle < MAX_THIGH_ANGLE) {
+					if(right_thigh.angle > -MAX_THIGH_ANGLE && right_thigh.angle < MAX_THIGH_ANGLE && right_thigh.y2 < GROUND-1) {
 						right_thigh.angle += DELTA_THETA;
 						right_calf.angle += DELTA_THETA;
 					}
 					break;
 				case 1: // W is pressed
-					if(left_thigh.angle > -MAX_THIGH_ANGLE && left_thigh.angle < MAX_THIGH_ANGLE) {
+					if(left_thigh.angle > -MAX_THIGH_ANGLE && left_thigh.angle < MAX_THIGH_ANGLE && left_thigh.y2 < GROUND-1) {
 						left_thigh.angle += DELTA_THETA;
 						left_calf.angle += DELTA_THETA;
 					}
 					break;
 				case 2: // O is pressed
-					if(left_calf.angle > (left_thigh.angle - 7 * PI / 8) && left_calf.angle < (left_thigh.angle))
-						left_calf.angle -= DELTA_THETA;
+					if(left_calf.angle > (left_thigh.angle - 7 * PI / 8) && left_calf.angle < (left_thigh.angle)) {
+						if(left_calf.x1 > torso.x2) {
+							left_thigh.angle += ((left_calf.angle > 0) ? 1 : -1) * DELTA_THETA;
+
+							int y_prime = left_thigh.y1 + THIGH_LENGTH * cos(left_thigh.angle);
+							double theta = acos(((double) min(GROUND - y_prime, CALF_LENGTH)) / CALF_LENGTH);
+							left_calf.angle = ((left_calf.angle > 0) ? 1 : -1) * theta;
+						} else {
+							left_calf.angle -= DELTA_THETA;
+						}
+					}
 					break;
 				case 3: // P is pressed
-					if(right_calf.angle > (right_thigh.angle - 7 * PI / 8) && right_calf.angle < (right_thigh.angle))
-						right_calf.angle -= DELTA_THETA;
+					if(right_calf.angle > (right_thigh.angle - 7 * PI / 8) && right_calf.angle < (right_thigh.angle)) {
+						if(right_calf.x1 > torso.x2) {
+							right_thigh.angle += ((right_calf.angle > 0) ? 1 : -1) * DELTA_THETA;
+
+							int y_prime = right_thigh.y1 + THIGH_LENGTH * cos(right_thigh.angle);
+							double theta = acos(((double) min(GROUND - y_prime, CALF_LENGTH)) / CALF_LENGTH);
+							right_calf.angle = ((right_calf.angle > 0) ? 1 : -1) * theta;
+						} else {
+							right_calf.angle -= DELTA_THETA;
+						}
+					}
 					break;
 				}
 			}
@@ -392,7 +411,7 @@ void UpdateBody(void) {
 	//if((controls[3] | controls[2] | controls[1] | controls[0]) == 0) {
 		int delta_h;
 		// Case I - Both legs are in front of the center of gravity
-		if(left_calf.x2 > WIDTH/2 && right_calf.x2 > WIDTH/2 && torso.y2 < GROUND-1) {\
+		if(left_calf.x2 > WIDTH/2 && right_calf.x2 > WIDTH/2 && torso.y2 < GROUND-1) {
 			if(left_thigh.angle < 3*PI/4)	left_thigh.angle += 4*DELTA_THETA;
 			if(left_calf.angle < 3*PI/5)	left_calf.angle += 4*DELTA_THETA;
 			if(right_thigh.angle < 3*PI/4)	right_thigh.angle += 4*DELTA_THETA;
