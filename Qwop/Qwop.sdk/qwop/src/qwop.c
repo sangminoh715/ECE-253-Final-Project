@@ -59,30 +59,30 @@
 }
 
 #define WRITE_SCORE {\
+	int x;\
 	XTft_SetPos(&TftInstance, 10, 10);\
-	XTft_Write(&TftInstance, 0x53);\
-	XTft_Write(&TftInstance, 0x43);\
-	XTft_Write(&TftInstance, 0x4F);\
-	XTft_Write(&TftInstance, 0x52);\
-	XTft_Write(&TftInstance, 0x45);\
-	XTft_Write(&TftInstance, 0x20);\
-	XTft_Write(&TftInstance, 0x20);\
-	XTft_Write(&TftInstance, 0x20);\
-	XTft_Write(&TftInstance, 0x20);\
-	XTft_Write(&TftInstance, 0x3A);\
+	for(x=0; x<10; ++x)\
+		XTft_Write(&TftInstance, scoreText[x]);\
 }
 #define WRITE_HI_SCORE {\
+	int y;\
 	XTft_SetPos(&TftInstance, 10, 30);\
-	XTft_Write(&TftInstance, 0x48);\
-	XTft_Write(&TftInstance, 0x49);\
-	XTft_Write(&TftInstance, 0x2D);\
-	XTft_Write(&TftInstance, 0x53);\
-	XTft_Write(&TftInstance, 0x43);\
-	XTft_Write(&TftInstance, 0x4F);\
-	XTft_Write(&TftInstance, 0x52);\
-	XTft_Write(&TftInstance, 0x45);\
-	XTft_Write(&TftInstance, 0x20);\
-	XTft_Write(&TftInstance, 0x3A);\
+	for(y=0; y<10; ++y)\
+		XTft_Write(&TftInstance, hiScoreText[y]);\
+}
+#define WRITE_GAME_OVER {\
+	int z;\
+	XTft_SetPos(&TftInstance, 60, HEIGHT/2-30);\
+	for(z=0; z<9; ++z)\
+		XTft_Write(&TftInstance, gameOverText1[z]);\
+	\
+	XTft_SetPos(&TftInstance, 23, HEIGHT/2);\
+	for(z=0; z<18; ++z)\
+		XTft_Write(&TftInstance, gameOverText2[z]);\
+	\
+	XTft_SetPos(&TftInstance, 43, HEIGHT/2+20);\
+	for(z=0; z<13; ++z)\
+		XTft_Write(&TftInstance, gameOverText3[z]);\
 }
 
 static XGpio led;
@@ -115,7 +115,14 @@ int controls[5] = {0,	// Q = Right Thigh
                    0};	// RESET
 int leftInFront = 1;
 int resetPressed = 0;
-int score = 0, hi_score = 0;
+int gameOver = 0;
+int score = 0, hiScore = 0;
+
+u8 scoreText[10] = {0x53, 0x43, 0x4F, 0x52, 0x45, 0x20, 0x20, 0x20, 0x20, 0x3A};
+u8 hiScoreText[10] = {0x48, 0x49, 0x2D, 0x53, 0x43, 0x4F, 0x52, 0x45, 0x20, 0x3A};
+u8 gameOverText1[9] =  {0x47, 0x41, 0x4D, 0x45, 0x20, 0x4F, 0x56, 0x45, 0x52};
+u8 gameOverText2[18] = {0x50, 0x4C, 0x45, 0x41, 0x53, 0x45, 0x20, 0x50, 0x52, 0x45, 0x53, 0x53, 0x20, 0x52, 0x45, 0x53, 0x45, 0x54};
+u8 gameOverText3[13] = {0x54, 0x4F, 0x20, 0x50, 0x4C, 0x41, 0x59, 0x20, 0x41, 0x47, 0x41, 0x49, 0x4E};
 
 /* -------------------- Functions -------------------- */
 
@@ -191,7 +198,7 @@ int main() {
 	WRITE_HI_SCORE;
 
 	UpdateScore(score, 0);
-	UpdateScore(hi_score, 1);
+	UpdateScore(hiScore, 1);
 
 	while(1) {
 		DRAW_GROUND;
@@ -225,16 +232,17 @@ void TimerInterruptHandler(void) {
 		InitializeParameters();
 		InitScreen();
 		resetPressed = 1;
+		gameOver = 0;
 
-		hi_score = (score > hi_score) ? score : hi_score;
+		hiScore = (score > hiScore) ? score : hiScore;
 		score = 0;
 
 		WRITE_SCORE;
 		WRITE_HI_SCORE;
 
 		UpdateScore(score/20, 0);
-		UpdateScore(hi_score/20, 1);
-	} else {
+		UpdateScore(hiScore/20, 1);
+	} else if(!gameOver) {
 		resetPressed = 0;
 
 		// Update Based on the inputs
@@ -437,6 +445,11 @@ void UpdateAndDisplayBody() {
 	DrawLine(right_thigh.x1, right_thigh.y1, right_thigh.x2, right_thigh.y2, WHITE);
 	DrawLine(right_calf.x1 , right_calf.y1 , right_calf.x2 , right_calf.y2 , WHITE);
 	DRAW_UPPER_BODY(WHITE);
+
+	if(torso.y2 >= GROUND-1) {
+		gameOver = 1;
+		WRITE_GAME_OVER;
+	}
 }
 
 // Update leg array values
