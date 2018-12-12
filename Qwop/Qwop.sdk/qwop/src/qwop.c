@@ -25,6 +25,12 @@
 
 #define BLACK	0x00000000
 #define WHITE	0xFFFFFFFF
+#define RED		0x00DB4832
+#define GREEN	0x0000FC00
+#define DARK_GREEN	0x003A8E4D
+
+// Additional color changes
+#define SKY_BLUE 0x0071E2FF
 
 #define WIDTH			640
 #define HEIGHT			480
@@ -45,7 +51,7 @@
 #define min(x, y) ((x < y) ? x : y)		// Return Minimum Value
 
 #define DRAW_BG			DrawBar(0, WIDTH, 0, HEIGHT, BLACK)
-#define DRAW_GROUND		DrawLine(0, GROUND, WIDTH, GROUND, WHITE)
+#define DRAW_GROUND		DrawLine(0, GROUND, WIDTH, GROUND, DARK_GREEN)
 #define DRAW_UPPER_BODY(color)	{\
 	DrawCircle(WIDTH/2, torso.y1 - 50, 50, color, 1);\
 	DrawLine(torso.x1-17, torso.y1-75, torso.x1-17, torso.y1-50, color);\
@@ -77,6 +83,7 @@
 }
 #define WRITE_GAME_OVER {\
 	int z;\
+	XTft_SetColor(&TftInstance, RED, BLACK);\
 	XTft_SetPos(&TftInstance, WIDTH/2-37, HEIGHT/4-30);\
 	for(z=0; z<9; ++z)\
 		XTft_Write(&TftInstance, gameOverText1[z]);\
@@ -88,9 +95,11 @@
 	XTft_SetPos(&TftInstance, WIDTH/2-51, HEIGHT/4+20);\
 	for(z=0; z<13; ++z)\
 		XTft_Write(&TftInstance, gameOverText3[z]);\
+	XTft_SetColor(&TftInstance, WHITE, BLACK);\
 }
 #define WRITE_GAME_OVER_SIDE {\
 	int z;\
+	XTft_SetColor(&TftInstance, RED, BLACK);\
 	XTft_SetPos(&TftInstance, 45, HEIGHT/2-30);\
 	for(z=0; z<9; ++z)\
 		XTft_Write(&TftInstance, gameOverText1[z]);\
@@ -102,6 +111,7 @@
 	XTft_SetPos(&TftInstance, 31, HEIGHT/2+20);\
 	for(z=0; z<13; ++z)\
 		XTft_Write(&TftInstance, gameOverText3[z]);\
+	XTft_SetColor(&TftInstance, WHITE, BLACK);\
 }
 
 static XGpio led;
@@ -123,7 +133,7 @@ struct part left_thigh, right_thigh;
 struct part left_calf, right_calf;
 struct part torso;
 
-int refPos = WIDTH, oldRefPos = WIDTH;
+float refPos = WIDTH, oldRefPos = WIDTH;
 
 int counter = 0;
 u16 leds = 0x0000;
@@ -137,7 +147,7 @@ int leftKneeInFront = 1;
 int resetPressed = 0;
 int gameOver = 0;
 int started = 0;
-int score = 0, hiScore = 0;
+float score = 0, hiScore = 0;
 int time = 30, timectr = 0;
 
 u8 scoreText[10] = {0x53, 0x43, 0x4F, 0x52, 0x45, 0x20, 0x20, 0x20, 0x20, 0x3A};
@@ -221,8 +231,8 @@ int main() {
 	WRITE_SCORE;
 	WRITE_HI_SCORE;
 
-	UpdateScore(score, 0);
-	UpdateScore(hiScore, 1);
+	UpdateScore((int) score, 0);
+	UpdateScore((int) hiScore, 1);
 
 	while(1) {
 		DRAW_GROUND;
@@ -292,7 +302,7 @@ void TimerInterruptHandler(void) {
 			if(controls[i]) {
 				switch(i) {
 				case 0: // Q is pressed
-					if(controls[1] || controls[2] || controls[3]) break;
+					if(controls[1]) break;
 
 					if(right_thigh.angle > -MAX_THIGH_ANGLE && right_thigh.angle < MAX_THIGH_ANGLE && right_thigh.y2 < GROUND-1) {
 						right_thigh.angle += DELTA_THETA;
@@ -307,7 +317,7 @@ void TimerInterruptHandler(void) {
 					}
 					break;
 				case 1: // W is pressed
-					if(controls[0] || controls[2] || controls[3]) break;
+					if(controls[0]) break;
 					if(left_thigh.angle > -MAX_THIGH_ANGLE && left_thigh.angle < MAX_THIGH_ANGLE && left_thigh.y2 < GROUND-1) {
 						left_thigh.angle += DELTA_THETA;
 
@@ -321,7 +331,7 @@ void TimerInterruptHandler(void) {
 					}
 					break;
 				case 2: // O is pressed
-					if(controls[0] || controls[1] || controls[3]) break;
+					if(controls[1] || controls[3]) break;
 					if(left_calf.angle > (left_thigh.angle - 7 * PI / 8) && left_calf.angle < (left_thigh.angle)) {
 						if(left_calf.x1 >= torso.x2 && left_calf.y1 < GROUND-1) {
 							left_thigh.angle += ((left_calf.angle > 0) ? 1 : -1) * DELTA_THETA;
@@ -329,15 +339,15 @@ void TimerInterruptHandler(void) {
 							int y_prime = left_thigh.y1 + THIGH_LENGTH * cos(left_thigh.angle);
 							left_calf.angle = ((left_calf.angle > 0) ? 1 : -1) * acos(((double) min(GROUND - y_prime, CALF_LENGTH)) / CALF_LENGTH);
 
-							score += 1;
-							refPos -= 1;
+							score += 0.4;
+							refPos -= 0.4;
 						} else {
 							left_calf.angle -= DELTA_THETA;
 						}
 					}
 					break;
 				case 3: // P is pressed
-					if(controls[0] || controls[1] || controls[2]) break;
+					if(controls[0] || controls[2]) break;
 					if(right_calf.angle > (right_thigh.angle - 7 * PI / 8) && right_calf.angle < (right_thigh.angle)) {
 						if(right_calf.x1 >= torso.x2 && right_calf.y1 < GROUND-1) {
 							right_thigh.angle += ((right_calf.angle > 0) ? 1 : -1) * DELTA_THETA;
@@ -345,8 +355,8 @@ void TimerInterruptHandler(void) {
 							int y_prime = right_thigh.y1 + THIGH_LENGTH * cos(right_thigh.angle);
 							right_calf.angle = ((right_calf.angle > 0) ? 1 : -1) * acos(((double) min(GROUND - y_prime, CALF_LENGTH)) / CALF_LENGTH);
 
-							score += 1;
-							refPos -= 1;
+							score += 0.4;
+							refPos -= 0.4;
 						} else {
 							right_calf.angle -= DELTA_THETA;
 						}
@@ -636,8 +646,8 @@ void UpdateRefPos(void) {
 	} else if(refPos < 0) {
 		refPos += WIDTH;
 	}
-	DrawBar(oldRefPos-10, oldRefPos, 440, 460, BLACK); //clear existing
-	DrawBar(refPos-10, refPos, 440, 460, 0x0000FC00); //update point
+	DrawBar((int) oldRefPos-15, (int) oldRefPos+10, 440, 460, BLACK); //clear existing
+	DrawBar((int) refPos-10, (int) refPos, 440, 460, GREEN); //update point
 	oldRefPos = refPos;
 }
 
